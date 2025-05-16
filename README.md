@@ -17,6 +17,6 @@ Follow these steps to set up the project locally:
 
 4. Install dependencies and setup Laravel:
 - Open your command prompt in the project folder and run:
-composer install (downloads all required PHP packages)
-php artisan key:generate (generates the app key used for security)
-php artisan migrate (creates all the database tables)
+    - composer install (downloads all required PHP packages)
+    - php artisan key:generate (generates the app key used for security)
+    - php artisan migrate (creates all the database tables)
