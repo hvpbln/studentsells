@@ -28,3 +28,8 @@ DB_PASSWORD= _blank_ or your db password
     - php artisan key:generate (generates the app key used for security)
     - php artisan session:table (creates a migration file for the sessions table)
     - php artisan migrate (creates all the database tables)
+
+5. If may babaguhin kayo sa migrations, tell exeryone so all of us can
+    - pull changes in code
+    - php artisan migrate:rollback (to delete the former migrations)
+    - php artisan migrate (to migrate the new set)
