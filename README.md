@@ -40,6 +40,9 @@ DB_PASSWORD= _blank_ or your db password
 
 ```
 php artisan tinker
+```
+Then enter the following code in Tinker:
+```
 use App\Models\User;
 
 User::create([
