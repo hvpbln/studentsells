@@ -40,7 +40,9 @@ class ItemController extends Controller
             'images.*' => 'image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
-        $item = Item::create($request->only(['title', 'description', 'price', 'status']));
+        $item = new Item($request->only(['title', 'description', 'price', 'status']));
+        $item->user_id = auth()->id(); // FOR THE LOGGED IN USER
+        $item->save();
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
