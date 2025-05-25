@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('wishlists', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            //$table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->string('title', 150);
             $table->text('description')->nullable();
             $table->decimal('price_range_min', 10, 2)->nullable();

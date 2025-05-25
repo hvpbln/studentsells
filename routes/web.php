@@ -7,6 +7,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\WishlistResponseController;
 
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
 
@@ -24,7 +26,7 @@ Route::middleware(['auth'])->group(function () {
         return redirect()->route('items.index');
     })->name('dashboard');
 
-    // admin routes
+    // Admin routes
     Route::middleware([AdminMiddleware::class])->group(function () {
         Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
         Route::get('/admin/users', [AdminController::class, 'showPendingUsers'])->name('admin.users');
@@ -32,11 +34,18 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/admin/users/{id}/status', [AdminController::class, 'updateUserStatus'])->name('admin.users.updateStatus');
     });
 
-    // student routes
+    // Student routes
     Route::middleware([StudentMiddleware::class])->group(function () {
         Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
 
         Route::resource('items', ItemController::class);
         Route::post('items/{id}/status', [ItemController::class, 'updateStatus'])->name('items.updateStatus');
+
+        Route::resource('wishlists', WishlistController::class);
+        Route::post('wishlists/{wishlist}/status', [WishlistController::class, 'updateStatus'])->name('wishlists.updateStatus');
+
+        Route::get('wishlists/{wishlist}/responses/create', [WishlistResponseController::class, 'create'])->name('wishlists.responses.create');
+        Route::post('wishlists/{wishlist}/responses', [WishlistResponseController::class, 'store'])->name('wishlists.responses.store');
     });
+
 });

@@ -53,3 +53,7 @@ User::create([
     'status' => 'active',
 ]);
 ``` 
+7. Storage Set up
+```
+php artisan storage:link
+```
