@@ -127,8 +127,8 @@
 
         <nav>
         <a href="#">Home</a>
-        <a href="#">Shop</a>
-        <a href="#">Wishlist</a>
+        <a href="{{ route('items.index') }}">Shop</a>
+        <a href="{{ route('wishlists.index') }}">Wishlist</a>
         <a href="#">Message</a>
         <a href="#">Logout</a>
         </nav>
@@ -141,10 +141,7 @@
         </div>
     </header>
         <div class="container mt-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <a href="{{ route('items.index') }}" class="btn btn-success">Listings</a>
-                <a href="{{ route('wishlists.index') }}" class="btn btn-success">Wishlists</a>
-            </div>
+            
             @yield('content')
         </div>
 
