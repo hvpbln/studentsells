@@ -3,7 +3,6 @@
 @section('content')
 <h4>{{ $item->title }}</h4>
 <p>Posted by: <strong>{{ $item->user->name }}</strong></p>
-//<p>Posted by: {{ $item->user?->name ?? 'Guest' }}</p> ONLY USE IF HINDI MAACCESS YUNG LISTING (INDEX & SHOW)
 <p>{{ $item->description }}</p>
 <p>Price: ${{ $item->price }}</p>
 <p>Status: <strong>{{ $item->status }}</strong></p>
