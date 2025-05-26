@@ -1,3 +1,8 @@
+@extends('layouts.admin')
+
+@section('title', 'Manage Users')
+
+@section('content')
 <!DOCTYPE html>
 <html>
 <head>
@@ -46,6 +51,11 @@
                                 <button type="submit">Revoke Ban</button>
                             </form>
                         @endif
+                            <form method="POST" action="{{ route('admin.users.delete', $user->id) }}" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" style="color: red; background: none; border: none; cursor: pointer;">Delete</button>
+                            </form>
                     </td>
                 </tr>
             @endforeach
@@ -55,3 +65,4 @@
     <p><a href="{{ route('admin.dashboard') }}">Back to Dashboard</a></p>
 </body>
 </html>
+@endsection

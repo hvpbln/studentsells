@@ -32,6 +32,16 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/admin/users', [AdminController::class, 'showPendingUsers'])->name('admin.users');
         Route::get('/admin/manage-users', [AdminController::class, 'manageUsers'])->name('admin.manageUsers');
         Route::post('/admin/users/{id}/status', [AdminController::class, 'updateUserStatus'])->name('admin.users.updateStatus');
+        Route::delete('/admin/users/{user}', [AdminController::class, 'deleteUser'])->name('admin.users.delete');
+
+        Route::get('/admin/listings', [AdminController::class, 'listings'])->name('admin.listings');
+        Route::delete('/admin/listings/{item}', [AdminController::class, 'deleteListing'])->name('admin.listings.delete');
+
+        Route::get('/admin/wishlists', [AdminController::class, 'wishlists'])->name('admin.wishlists');
+        Route::delete('/admin/wishlists/{wishlist}', [AdminController::class, 'deleteWishlist'])->name('admin.wishlists.delete');
+
+        Route::get('/admin/responses', [AdminController::class, 'responses'])->name('admin.responses');
+        Route::delete('/admin/responses/{response}', [AdminController::class, 'deleteResponse'])->name('admin.responses.delete');
     });
 
     // Student routes
