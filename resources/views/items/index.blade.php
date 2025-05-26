@@ -16,7 +16,6 @@
                 <span class="badge bg-secondary">{{ $item->status }}</span>
             </h5>
             <p class="mb-1">Posted by: <strong>{{ $item->user->name }}</strong></p>
-            //<p>Posted by: {{ $item->user?->name ?? 'Guest' }}</p> ONLY USE IF HINDI MAACCESS YUNG LISTING (INDEX & SHOW)
             <p>{{ $item->description }}</p>
             <a href="{{ route('items.show', $item->id) }}" class="btn btn-sm btn-info">View</a>
 
