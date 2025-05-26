@@ -15,9 +15,10 @@
         <div class="card mb-3">
             <div class="card-body">
                 <h5 class="card-title">
-                    {{ $wishlist->title }} 
+                    {{ $wishlist->title }}
                     <span class="badge bg-secondary">{{ ucfirst($wishlist->status) }}</span>
                 </h5>
+                <p><strong>Posted by:</strong> {{ $wishlist->user->name ?? 'Unknown' }}</p>
                 <p>{{ Str::limit($wishlist->description, 150) }}</p>
 
                 @if($wishlist->images->count())
@@ -29,12 +30,15 @@
                 @endif
 
                 <a href="{{ route('wishlists.show', $wishlist->id) }}" class="btn btn-sm btn-info">View</a>
-                <a href="{{ route('wishlists.edit', $wishlist->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                <form action="{{ route('wishlists.destroy', $wishlist->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this wishlist?');">
-                    @csrf
-                    @method('DELETE')
-                    <button class="btn btn-sm btn-danger">Delete</button>
-                </form>
+
+                @if(Auth::id() === $wishlist->user_id)
+                    <a href="{{ route('wishlists.edit', $wishlist->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                    <form action="{{ route('wishlists.destroy', $wishlist->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this wishlist?');">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                @endif
             </div>
         </div>
     @endforeach

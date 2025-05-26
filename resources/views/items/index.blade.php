@@ -11,14 +11,21 @@
 @foreach($items as $item)
     <div class="card mb-3">
         <div class="card-body">
-            <h5>{{ $item->title }} <span class="badge bg-secondary">{{ $item->status }}</span></h5>
+            <h5>
+                {{ $item->title }} 
+                <span class="badge bg-secondary">{{ $item->status }}</span>
+            </h5>
+            <p class="mb-1">Posted by: <strong>{{ $item->user->name }}</strong></p>
             <p>{{ $item->description }}</p>
             <a href="{{ route('items.show', $item->id) }}" class="btn btn-sm btn-info">View</a>
-            <a href="{{ route('items.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
-            <form action="{{ route('items.destroy', $item->id) }}" method="POST" style="display:inline;">
-                @csrf @method('DELETE')
-                <button class="btn btn-sm btn-danger">Delete</button>
-            </form>
+
+            @if(Auth::id() === $item->user_id)
+                <a href="{{ route('items.edit', $item->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                <form action="{{ route('items.destroy', $item->id) }}" method="POST" style="display:inline;">
+                    @csrf @method('DELETE')
+                    <button class="btn btn-sm btn-danger">Delete</button>
+                </form>
+            @endif
         </div>
     </div>
 @endforeach
