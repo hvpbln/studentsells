@@ -126,12 +126,16 @@
         </div>
 
         <nav>
-        <a href="#">Home</a>
-        <a href="{{ route('items.index') }}">Shop</a>
-        <a href="{{ route('wishlists.index') }}">Wishlist</a>
-        <a href="#">Message</a>
-        <a href="#">Logout</a>
+            <a href="{{ route('student.dashboard') }}">Home</a>
+            <a href="{{ route('items.index') }}">Shop</a>
+            <a href="{{ route('wishlists.index') }}">Wishlist</a>
+            <a href="#">Message</a>
+            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
         </nav>
+
+        <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display: none;">
+            @csrf
+        </form>
 
         <div class="right-section">
         <div class="search-box">
@@ -148,4 +152,3 @@
 <script src="js/navbar.js"></script>
 </body>
 </html>
-

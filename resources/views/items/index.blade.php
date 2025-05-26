@@ -30,9 +30,4 @@
     </div>
 @endforeach
 
-<form method="POST" action="{{ route('logout') }}" class="mb-3 text-end">
-    @csrf
-    <button type="submit" class="btn btn-danger">Logout</button>
-</form>
-
 @endsection

@@ -64,7 +64,7 @@ class AuthController extends Controller
 
             return $user->role === 'admin'
                 ? redirect()->route('admin.dashboard')
-                : redirect()->route('items.index');
+                : redirect()->route('student.dashboard');
         }
 
         return back()->withErrors(['email' => 'Invalid credentials.']);
