@@ -2,6 +2,7 @@
 
 @section('content')
 <h4>{{ $item->title }}</h4>
+<p>Posted by: <strong>{{ $item->user->name }}</strong></p>
 <p>{{ $item->description }}</p>
 <p>Price: ${{ $item->price }}</p>
 <p>Status: <strong>{{ $item->status }}</strong></p>

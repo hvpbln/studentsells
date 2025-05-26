@@ -10,7 +10,7 @@ class ItemController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Item::with('images');
+        $query = Item::with(['images', 'user']);
 
         if ($request->filled('search')) {
             $search = $request->get('search');
@@ -56,7 +56,7 @@ class ItemController extends Controller
 
     public function show($id)
     {
-        $item = Item::with('images')->findOrFail($id);
+        $item = Item::with(['images', 'user'])->findOrFail($id);
         return view('items.show', compact('item'));
     }
 

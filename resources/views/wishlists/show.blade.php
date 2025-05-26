@@ -3,7 +3,7 @@
 @section('content')
 <h1>{{ $wishlist->title }}</h1>
 
-<p><strong>Description:</strong> {{ $wishlist->description }}</p>
+<p><strong>Posted by:</strong> {{ $wishlist->user->name ?? 'Unknown' }}</p>
 
 <p>
     <strong>Price Range:</strong> 
