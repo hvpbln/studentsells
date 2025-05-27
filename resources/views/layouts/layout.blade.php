@@ -114,6 +114,25 @@
         height: 30px;
         border-radius: 10%;
         }
+        
+        .card-display {
+            border-radius: 12px;
+            overflow: visible;
+        }
+        
+        .img-list {
+            max-height: auto;
+            object-fit: cover;
+            width: 500px;
+        }
+
+        .list-img {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
     </style>
 </head>
 <body>
@@ -150,5 +169,6 @@
         </div>
 
 <script src="js/navbar.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
