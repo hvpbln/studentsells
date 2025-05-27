@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Item;
 use App\Models\ItemImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ItemController extends Controller
 {
@@ -12,17 +13,17 @@ class ItemController extends Controller
     {
         $query = Item::with(['images', 'user']);
 
-        if ($request->filled('search')) {
-            $search = $request->get('search');
-            $query->where(function ($q) use ($search) {
-                $q->where('title', 'like', "%$search%")
-                ->orWhere('description', 'like', "%$search%");
-            });
-        }
+        $search = $request->input('search');
 
-        $items = $query->latest()->get();
+        $items = \App\Models\Item::query()
+        ->when($search, function ($query, $search) {
+            $query->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+        })
+        ->latest()
+        ->get();
 
-        return view('items.index', compact('items'));
+        return view('items.index', compact('items', 'search'));
     }
 
     public function create()
@@ -46,10 +47,11 @@ class ItemController extends Controller
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
-                $path = $image->store('item_images', 'public');
+                $path = $image->store('items', 'public');
                 $item->images()->create(['image_url' => $path]);
             }
         }
+
 
         return redirect()->route('items.index')->with('success', 'Item created successfully.');
     }
@@ -66,20 +68,25 @@ class ItemController extends Controller
         return view('items.edit', compact('item'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Item $item)
     {
-        $item = Item::findOrFail($id);
-
-        $request->validate([
-            'title' => 'required|string',
-            'description' => 'nullable|string',
-            'price' => 'nullable|numeric',
-            'status' => 'in:Available,Reserved,Sold',
-        ]);
-
         $item->update($request->only(['title', 'description', 'price', 'status']));
 
-        return redirect()->route('items.index')->with('success', 'Item updated successfully.');
+        if ($request->hasFile('images')) {
+            foreach ($item->images as $image) {
+                Storage::delete('public/' . $image->image_url);
+                $image->delete();
+            }
+
+            foreach ($request->file('images') as $file) {
+                $path = $file->store('images', 'public');
+                $item->images()->create([
+                    'image_url' => $path,
+                ]);
+            }
+        }
+
+        return redirect()->route('items.index')->with('success', 'Item updated!');
     }
 
     public function destroy($id)
