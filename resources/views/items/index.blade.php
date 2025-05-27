@@ -16,28 +16,34 @@
     @foreach($items as $item)
     <div class="card mb-4 shadow-sm position-relative card-display">
         <div class="card-body position-relative">
-            {{-- Three-dot menu --}}
-            <div class="dropdown">
                 <div class="dropdown position-absolute top-0 end-0 m-2">
                     <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <strong>&#8942;</strong>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
+
                         <li><a class="dropdown-item" href="{{ route('items.show', $item->id) }}">View</a></li>
-                        <li><a class="dropdown-item" href="{{ route('items.edit', $item->id) }}">Edit</a></li>
-                        <li>
-                            <form action="{{ route('items.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Are you sure?')">
-                                @csrf @method('DELETE')
-                                <button class="dropdown-item text-danger" type="submit">Delete</button>
-                            </form>
-                        </li>
+
+                        @auth
+                            @if(auth()->id() === $item->user_id)
+                                <li><a class="dropdown-item" href="{{ route('items.edit', $item->id) }}">Edit</a></li>
+                                <li>
+                                    <form action="{{ route('items.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Are you sure?')">
+                                        @csrf @method('DELETE')
+                                        <button class="dropdown-item text-danger" type="submit">Delete</button>
+                                    </form>
+                                </li>
+                            @endif
+                        @endauth
                     </ul>
                 </div>
-            </div>
 
             <h5 class="fw-bold">{{ $item->title }}
                 <span class="badge bg-secondary">{{ $item->status }}</span>
             </h5>
+
+            <p>Posted by <strong>{{ $item->user->name ?? 'Unknown' }}</strong></p>
+
 
             <p class="text-muted">{{ $item->description }}</p>
             <div class=list-img>
