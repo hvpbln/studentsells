@@ -50,5 +50,13 @@
     </div>
 @endforeach
 
+@elseif(request('search'))
+    <div class="alert alert-warning">
+        No results found for "{{ request('search') }}".
+    </div>
+@else
+    <div class="alert alert-info">
+        No items have been listed yet.
+    </div>
 @endif
 @endsection
