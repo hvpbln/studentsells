@@ -16,8 +16,14 @@ class Item extends Model
         return $this->hasMany(ItemImage::class);
     }
 
-        public function user()
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
+
+    public function responses()
+    {
+        return $this->hasMany(ListingResponse::class);
+    }
+
 }
