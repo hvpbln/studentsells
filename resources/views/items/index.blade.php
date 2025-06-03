@@ -47,9 +47,14 @@
 
             <p class="text-muted">{{ $item->description }}</p>
             <div class=list-img>
-                @if($item->images->first())
-                    <img src="{{ asset('storage/' . $item->images->first()->image_url) }}?v={{ time() }}"
-                    class="img-fluid rounded mb-3 img-list">
+                @if($item->images->count())
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        @foreach($item->images as $image)
+                            <img src="{{ asset('storage/' . $image->image_url) }}?v={{ time() }}"
+                                class="img-fluid rounded img-list"
+                                style="width: 200px; height: auto;">
+                        @endforeach
+                    </div>
                 @endif
             </div>
         </div>
