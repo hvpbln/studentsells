@@ -55,4 +55,10 @@ class User extends Authenticatable
         return $this->hasMany(WishlistResponse::class);
     }
 
+    public function listingResponses()
+    {
+        return $this->hasMany(ListingResponse::class);
+    }
+
+
 }
