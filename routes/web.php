@@ -9,6 +9,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\WishlistResponseController;
+use App\Http\Controllers\ListingResponseController;
 
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
 
@@ -50,12 +51,17 @@ Route::middleware(['auth'])->group(function () {
 
         Route::resource('items', ItemController::class);
         Route::post('items/{id}/status', [ItemController::class, 'updateStatus'])->name('items.updateStatus');
+        Route::get('/items/{item}/respond', [ItemController::class, 'respond'])->name('listings.respond');
+        Route::post('/items/{item}/respond', [ItemController::class, 'sendResponse'])->name('listings.sendResponse');
 
         Route::resource('wishlists', WishlistController::class);
         Route::post('wishlists/{wishlist}/status', [WishlistController::class, 'updateStatus'])->name('wishlists.updateStatus');
 
         Route::get('wishlists/{wishlist}/responses/create', [WishlistResponseController::class, 'create'])->name('wishlists.responses.create');
         Route::post('wishlists/{wishlist}/responses', [WishlistResponseController::class, 'store'])->name('wishlists.responses.store');
+
+        Route::get('/items/{item}/respond', [ListingResponseController::class, 'create'])->name('items.respond');
+        Route::post('/items/{item}/respond', [ListingResponseController::class, 'store'])->name('items.sendresponse');
     });
 
 });
