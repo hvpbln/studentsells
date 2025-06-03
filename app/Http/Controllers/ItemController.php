@@ -70,23 +70,31 @@ class ItemController extends Controller
 
     public function update(Request $request, Item $item)
     {
+        $request->validate([
+            'title' => 'required|string',
+            'description' => 'nullable|string',
+            'price' => 'nullable|numeric',
+            'status' => 'in:Available,Reserved,Sold',
+            'images.*' => 'image|mimes:jpeg,png,jpg|max:2048'
+        ]);
+
         $item->update($request->only(['title', 'description', 'price', 'status']));
 
         if ($request->hasFile('images')) {
+            // Delete old images from storage and DB
             foreach ($item->images as $image) {
-                Storage::delete('public/' . $image->image_url);
+                Storage::disk('public')->delete($image->image_url);
                 $image->delete();
             }
 
-            foreach ($request->file('images') as $file) {
-                $path = $file->store('images', 'public');
-                $item->images()->create([
-                    'image_url' => $path,
-                ]);
+            // Store new images
+            foreach ($request->file('images') as $imageFile) {
+                $path = $imageFile->store('items', 'public');
+                $item->images()->create(['image_url' => $path]);
             }
         }
 
-        return redirect()->route('items.index')->with('success', 'Item updated!');
+        return redirect()->route('items.index')->with('success', 'Listing updated successfully.');
     }
 
     public function destroy($id)
@@ -115,4 +123,10 @@ class ItemController extends Controller
 
         return redirect()->back()->with('success', 'Status updated.');
     }
+
+    public function respond(Item $item)
+    {
+        return view('items.respond', compact('item'));
+    }
+
 }
