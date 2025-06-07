@@ -9,11 +9,27 @@ use Illuminate\Support\Facades\Storage;
 
 class WishlistController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $wishlists = Wishlist::with('images')
-            ->latest()
-            ->paginate(10);
+        $query = Wishlist::with('images', 'user')->latest();
+
+        if ($request->filled('search')) {
+            $searchTerms = explode(' ', $request->search);
+
+            $query->where(function ($q) use ($searchTerms) {
+                foreach ($searchTerms as $term) {
+                    $q->where(function ($subQuery) use ($term) {
+                        $subQuery->where('title', 'like', "%{$term}%")
+                                ->orWhere('description', 'like', "%{$term}%")
+                                ->orWhereHas('user', function ($userQuery) use ($term) {
+                                    $userQuery->where('name', 'like', "%{$term}%");
+                                });
+                    });
+                }
+            });
+        }
+
+        $wishlists = $query->paginate(10)->withQueryString();
 
         return view('wishlists.index', compact('wishlists'));
     }

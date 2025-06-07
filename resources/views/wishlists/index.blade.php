@@ -3,7 +3,14 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1>Wishlists</h1>
-    <a href="{{ route('wishlists.create') }}" class="btn btn-primary">Create New Wishlist</a>
+
+    <div class="d-flex">
+        <form action="{{ route('wishlists.index') }}" method="GET" class="d-flex me-3">
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search wishlists..." class="form-control me-2">
+            <button type="submit" class="btn btn-outline-secondary">Search</button>
+        </form>
+        <a href="{{ route('wishlists.create') }}" class="btn btn-primary">Create New Wishlist</a>
+    </div>
 </div>
 
 @if(session('success'))
