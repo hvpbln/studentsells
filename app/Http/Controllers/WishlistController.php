@@ -76,9 +76,27 @@ class WishlistController extends Controller
             'price_range_max' => 'nullable|numeric|gte:price_range_min',
             'status' => 'required|in:open,in negotiation,fulfilled,closed',
             'images.*' => 'nullable|image|max:2048',
+            'delete_images' => 'nullable|array',
+            'delete_images.*' => 'exists:wishlist_images,id',
         ]);
 
-        $wishlist->update($validated);
+        $wishlist->update([
+            'title' => $validated['title'],
+            'description' => $validated['description'] ?? null,
+            'price_range_min' => $validated['price_range_min'] ?? null,
+            'price_range_max' => $validated['price_range_max'] ?? null,
+            'status' => $validated['status'],
+        ]);
+
+        if ($request->filled('delete_images')) {
+            foreach ($request->delete_images as $imageId) {
+                $image = $wishlist->images()->find($imageId);
+                if ($image) {
+                    Storage::disk('public')->delete($image->image_url);
+                    $image->delete();
+                }
+            }
+        }
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $file) {
@@ -88,20 +106,6 @@ class WishlistController extends Controller
         }
 
         return redirect()->route('wishlists.index')->with('success', 'Wishlist updated successfully.');
-    }
-
-    public function destroy(Wishlist $wishlist)
-    {
-        $this->authorize('delete', $wishlist);
-
-        foreach ($wishlist->images as $image) {
-            Storage::disk('public')->delete($image->image_url);
-            $image->delete();
-        }
-
-        $wishlist->delete();
-
-        return redirect()->route('wishlists.index')->with('success', 'Wishlist deleted successfully.');
     }
 
     public function updateStatus(Request $request, Wishlist $wishlist)

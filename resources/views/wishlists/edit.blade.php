@@ -59,17 +59,27 @@
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
 
-        @if($wishlist->images->count())
-            <div class="mt-3">
-                <p>Current Images:</p>
+        <div class="mt-3">
+            <p>Current Images:</p>
+            <div class="row">
                 @foreach($wishlist->images as $image)
-                    <img src="{{ asset('storage/' . $image->image_url) }}" alt="Image" width="120" class="img-thumbnail me-2 mb-2">
+                    <div class="col-md-3 text-center mb-3">
+                        <img src="{{ asset('storage/' . $image->image_url) }}" alt="Image" width="120" class="img-thumbnail mb-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="delete_images[]" value="{{ $image->id }}" id="delete_image_{{ $image->id }}">
+                            <label class="form-check-label" for="delete_image_{{ $image->id }}">
+                                Delete
+                            </label>
+                        </div>
+                    </div>
                 @endforeach
             </div>
-        @endif
+        </div>
     </div>
 
     <button type="submit" class="btn btn-primary">Update Wishlist</button>
     <a href="{{ route('wishlists.index') }}" class="btn btn-secondary ms-2">Cancel</a>
 </form>
+<br>
+<br>
 @endsection
