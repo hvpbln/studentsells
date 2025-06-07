@@ -32,7 +32,11 @@
                 <td>{{ ucfirst($wishlist->status) }}</td>
                 <td>
                     @if($wishlist->images->count())
-                        <img src="{{ asset('storage/' . $wishlist->images->first()->image_url) }}" alt="Image" width="60" class="img-thumbnail">
+                        <div class="d-flex flex-wrap" style="gap: 5px;">
+                            @foreach($wishlist->images as $image)
+                                <img src="{{ asset('storage/' . $image->image_url) }}" alt="Image" width="60" class="img-thumbnail">
+                            @endforeach
+                        </div>
                     @else
                         N/A
                     @endif
