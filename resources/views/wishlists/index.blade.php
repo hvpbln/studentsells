@@ -19,12 +19,40 @@
 
 @if($wishlists->count())
     @foreach($wishlists as $wishlist)
-        <div class="card mb-3">
+        <div class="card mb-3 position-relative">
             <div class="card-body">
+
+                {{-- Dropdown Toggle --}}
+                @if(Auth::id() === $wishlist->user_id)
+                    <div class="dropdown position-absolute top-0 end-0 m-2">
+                        <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <strong>&#8942;</strong>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a href="{{ route('wishlists.edit', $wishlist->id) }}" class="dropdown-item">Edit</a>
+                            </li>
+                            <li>
+                                <button class="dropdown-item text-danger"
+                                    onclick="event.preventDefault(); if(confirm('Are you sure you want to delete this wishlist?')) document.getElementById('delete-wishlist-{{ $wishlist->id }}').submit();">
+                                    Delete
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <form id="delete-wishlist-{{ $wishlist->id }}" action="{{ route('wishlists.destroy', $wishlist->id) }}"
+                          method="POST" class="d-none">
+                        @csrf
+                        @method('DELETE')
+                    </form>
+                @endif
+
                 <h5 class="card-title">
                     {{ $wishlist->title }}
                     <span class="badge bg-secondary">{{ ucfirst($wishlist->status) }}</span>
                 </h5>
+
                 <p><strong>Posted by:</strong> {{ $wishlist->user->name ?? 'Unknown' }}</p>
                 <p>{{ Str::limit($wishlist->description, 150) }}</p>
 
@@ -38,15 +66,6 @@
 
                 <a href="{{ route('wishlists.show', $wishlist->id) }}" class="btn btn-sm btn-info">View</a>
                 <a href="{{ route('wishlists.responses.create', $wishlist->id) }}" class="btn btn-sm btn-info">Respond to Wishlist</a>
-
-                @if(Auth::id() === $wishlist->user_id)
-                    <a href="{{ route('wishlists.edit', $wishlist->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                    <form action="{{ route('wishlists.destroy', $wishlist->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this wishlist?');">
-                        @csrf
-                        @method('DELETE')
-                        <button class="btn btn-sm btn-danger">Delete</button>
-                    </form>
-                @endif
             </div>
         </div>
     @endforeach

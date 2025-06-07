@@ -136,4 +136,17 @@ class WishlistController extends Controller
 
         return redirect()->route('wishlists.show', $wishlist->id)->with('success', 'Status updated.');
     }
+        public function destroy(Wishlist $wishlist)
+    {
+        $this->authorize('delete', $wishlist);
+        foreach ($wishlist->images as $image) {
+            \Storage::disk('public')->delete($image->image_url);
+            $image->delete();
+        }
+
+        $wishlist->delete();
+
+        return redirect()->route('wishlists.index')->with('success', 'Wishlist deleted successfully.');
+    }
+
 }
