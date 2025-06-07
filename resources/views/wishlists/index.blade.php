@@ -30,6 +30,7 @@
                 @endif
 
                 <a href="{{ route('wishlists.show', $wishlist->id) }}" class="btn btn-sm btn-info">View</a>
+                <a href="{{ route('wishlists.responses.create', $wishlist->id) }}" class="btn btn-sm btn-info">Respond to Wishlist</a>
 
                 @if(Auth::id() === $wishlist->user_id)
                     <a href="{{ route('wishlists.edit', $wishlist->id) }}" class="btn btn-sm btn-warning">Edit</a>
