@@ -11,19 +11,27 @@ class ItemController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Item::with(['images', 'user']);
+        $query = Item::with('images', 'user')->latest();
 
-        $search = $request->input('search');
+        if ($request->filled('search')) {
+            $searchTerms = explode(' ', $request->search);
 
-        $items = \App\Models\Item::query()
-        ->when($search, function ($query, $search) {
-            $query->where('title', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%");
-        })
-        ->latest()
-        ->get();
+            $query->where(function ($q) use ($searchTerms) {
+                foreach ($searchTerms as $term) {
+                    $q->where(function ($subQuery) use ($term) {
+                        $subQuery->where('title', 'like', "%{$term}%")
+                                ->orWhere('description', 'like', "%{$term}%")
+                                ->orWhereHas('user', function ($userQuery) use ($term) {
+                                    $userQuery->where('name', 'like', "%{$term}%");
+                                });
+                    });
+                }
+            });
+        }
 
-        return view('items.index', compact('items', 'search'));
+        $items = $query->paginate(10)->withQueryString();
+
+        return view('items.index', compact('items'));
     }
 
     public function create()
