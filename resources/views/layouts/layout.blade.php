@@ -70,12 +70,12 @@
         }
 
         nav a.active {
-        font-weight: 700;
+            font-weight: 700;
         }
-        
+
         nav a:hover {
-        background-color: #f0f0f0;
-        cursor: pointer;
+            background-color: #f0f0f0;
+            cursor: pointer;
         }
 
         .right-section {

@@ -54,6 +54,12 @@
             margin-left: 6px;
         }
 
+        .nav-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
         nav {
             display: flex;
             align-items: center;
@@ -127,18 +133,23 @@
             <span class="bold">Student</span><span class="script">Sells</span>
         </div>
     </div>
-    <nav>
-        <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">Dashboard</a>
-        <a href="{{ route('admin.manageUsers') }}" class="{{ request()->routeIs('admin.manageUsers') ? 'active' : '' }}">Users</a>
-        <a href="{{ route('admin.listings') }}" class="{{ request()->routeIs('admin.listings') ? 'active' : '' }}">Listings</a>
-        <a href="{{ route('admin.wishlists') }}" class="{{ request()->routeIs('admin.wishlists') ? 'active' : '' }}">Wishlists</a>
-        <a href="{{ route('admin.responses') }}" class="{{ request()->routeIs('admin.responses') ? 'active' : '' }}">Responses</a>
-    </nav>
-    <form method="POST" action="{{ route('logout') }}">
+
+    <div class="nav-wrapper">
+        <nav>
+            <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">Dashboard</a>
+            <a href="{{ route('admin.manageUsers') }}" class="{{ request()->routeIs('admin.manageUsers') ? 'active' : '' }}">Users</a>
+            <a href="{{ route('admin.listings') }}" class="{{ request()->routeIs('admin.listings') ? 'active' : '' }}">Listings</a>
+            <a href="{{ route('admin.wishlists') }}" class="{{ request()->routeIs('admin.wishlists') ? 'active' : '' }}">Wishlists</a>
+            <a href="{{ route('admin.responses') }}" class="{{ request()->routeIs('admin.responses') ? 'active' : '' }}">Responses</a>
+            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+        </nav>
+    </div>
+
+    <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display: none;">
         @csrf
-        <button type="submit" class="box">Logout</button>
     </form>
 </header>
+
 
 <div class="tab-content">
     @yield('content')
