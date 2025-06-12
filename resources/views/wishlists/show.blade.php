@@ -11,7 +11,11 @@
 
             <p class="text-muted mb-1">
                 <i class="bi bi-person-circle me-1"></i>
-                <strong>Posted by:</strong> {{ $wishlist->user->name ?? 'Unknown' }}
+                <strong>Posted by:            
+                <a href="{{ route('users.show', $wishlist->user_id) }}">
+                {{ $wishlist->user->name ?? 'Unknown' }}
+                </a>
+                </strong>
             </p>
 
             <p class="mb-1">

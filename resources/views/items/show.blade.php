@@ -4,7 +4,13 @@
 <div class="card mb-4 shadow-sm card-display">
     <div class="card-body">
         <h4 class="fw-bold">{{ $item->title }}</h4>
-        <p>Posted by: <strong>{{ $item->user->name }}</strong></p>
+        <p>Posted by:  
+            <strong>                
+                <a href="{{ route('users.show', $item->user_id) }}">
+                {{ $item->user->name ?? 'Unknown' }}
+                </a>
+            </strong> 
+        </p>
         <p class="text-muted">{{ $item->description }}</p>
         <p><strong>Price:</strong> ${{ $item->price }}</p>
         <p><strong>Status:</strong> <span class="badge bg-secondary">{{ $item->status }}</span></p>
