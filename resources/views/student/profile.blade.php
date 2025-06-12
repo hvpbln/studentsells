@@ -76,9 +76,32 @@
     {{-- Profile Header --}}
     <div class="profile-header">
         <img src="{{ asset('storage/' . ($user->profile_photo ?? 'default.png')) }}" alt="Profile Photo">
-        <div>
+
+        <div class="flex-grow-1">
             <h2>{{ $user->name }}</h2>
-            <p class="text-muted">{{ $user->email }}</p>
+            <p class="text-muted mb-1">{{ $user->email }}</p>
+
+            {{-- Average Rating --}}
+            @if($user->ratingsReceived()->count())
+                <div class="text-warning d-flex align-items-center">
+                    <div style="font-size: 1.2rem; margin-right: 8px;">
+                        @for ($i = 1; $i <= 5; $i++)
+                            @if ($i <= floor($user->averageRating()))
+                                ★
+                            @elseif ($i - 0.5 <= $user->averageRating())
+                                ☆
+                            @else
+                                ☆
+                            @endif
+                        @endfor
+                    </div>
+                    <span class="text-muted" style="font-size: 0.95rem;">
+                        ({{ number_format($user->averageRating(), 1) }} / 5 from {{ $user->ratingsReceived()->count() }} ratings)
+                    </span>
+                </div>
+            @else
+                <p class="text-muted mt-1">No ratings yet.</p>
+            @endif
         </div>
     </div>
 

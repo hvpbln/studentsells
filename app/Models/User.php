@@ -54,7 +54,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(WishlistResponse::class);
     }
-    
+
     public function items()
     {
         return $this->hasMany(Item::class);
@@ -65,5 +65,20 @@ class User extends Authenticatable
         return $this->hasMany(ListingResponse::class);
     }
 
+        public function ratingsGiven() {
+        return $this->hasMany(Rating::class, 'rater_id');
+    }
+
+    public function ratingsReceived() {
+        return $this->hasMany(Rating::class, 'ratee_id');
+    }
+
+    public function averageRating() {
+        return round($this->ratingsReceived()->avg('rating'), 1);
+    }
+
+    public function hasRatedBy($userId) {
+        return $this->ratingsReceived()->where('rater_id', $userId)->exists();
+    }
 
 }

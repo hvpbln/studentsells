@@ -11,6 +11,7 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\WishlistResponseController;
 use App\Http\Controllers\ListingResponseController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\RatingController;
 
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
 
@@ -71,4 +72,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Public profile route for viewing other users' listings and wishlists
     Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
+    Route::post('/users/{user}/rate', [RatingController::class, 'store'])->name('users.rate')->middleware('auth');
+
+
 });
