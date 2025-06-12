@@ -77,6 +77,26 @@
         color: #999;
         padding: 1.5rem;
     }
+
+    .tab-buttons {
+        margin-bottom: 1rem;
+    }
+
+    .tab-buttons button {
+        padding: 10px 16px;
+        margin-right: 10px;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+        color: #333;
+        cursor: pointer;
+        border-radius: 4px;
+        font-size: 0.95rem;
+    }
+
+    .tab-buttons button.active {
+        background-color: #8E9DCC;
+        color: white;
+    }
 </style>
 
 <h1 class="page-title">Manage All Responses</h1>
@@ -85,72 +105,96 @@
     <div class="alert-success">{{ session('success') }}</div>
 @endif
 
-<h3 class="section-title">Wishlist Responses</h3>
-<table class="clean-table">
-    <thead>
-        <tr>
-            <th>Responder</th>
-            <th>Wishlist Title</th>
-            <th>Message</th>
-            <th>Offer Price</th>
-            <th>Sent At</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @forelse($wishlistResponses as $response)
-            <tr>
-                <td>{{ $response->user->name ?? 'Unknown' }}</td>
-                <td>{{ $response->wishlist->title ?? 'Deleted Wishlist' }}</td>
-                <td>{{ Str::limit($response->message, 50) }}</td>
-                <td>{{ $response->offer_price ? '$' . number_format($response->offer_price, 2) : 'N/A' }}</td>
-                <td>{{ $response->created_at->format('M d, Y H:i') }}</td>
-                <td>
-                    <form action="{{ route('admin.responses.wishlist.delete', $response->id) }}" method="POST" onsubmit="return confirm('Delete this wishlist response?');">
-                        @csrf
-                        @method('DELETE')
-                        <button class="btn-delete">Delete</button>
-                    </form>
-                </td>
-            </tr>
-        @empty
-            <tr><td colspan="6" class="text-center">No wishlist responses found.</td></tr>
-        @endforelse
-    </tbody>
-</table>
+{{-- Tab Buttons --}}
+<div class="tab-buttons">
+    <button class="active" onclick="showTab('listing')">Listing Responses</button>
+    <button onclick="showTab('wishlist')">Wishlist Responses</button>
+</div>
 
-<h3 class="section-title">Listing Responses</h3>
-<table class="clean-table">
-    <thead>
-        <tr>
-            <th>Responder</th>
-            <th>Listing Title</th>
-            <th>Message</th>
-            <th>Offer Price</th>
-            <th>Sent At</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @forelse($listingResponses as $response)
+{{-- Listing Responses Tab --}}
+<div id="listing-tab">
+    <h3 class="section-title">Listing Responses</h3>
+    <table class="clean-table">
+        <thead>
             <tr>
-                <td>{{ $response->user->name ?? 'Unknown' }}</td>
-                <td>{{ $response->item->title ?? 'Deleted Listing' }}</td>
-                <td>{{ Str::limit($response->message, 50) }}</td>
-                <td>{{ $response->offer_price ? '$' . number_format($response->offer_price, 2) : 'N/A' }}</td>
-                <td>{{ $response->created_at->format('M d, Y H:i') }}</td>
-                <td>
-                    <form action="{{ route('admin.responses.listing.delete', $response->id) }}" method="POST" onsubmit="return confirm('Delete this listing response?');">
-                        @csrf
-                        @method('DELETE')
-                        <button class="btn-delete">Delete</button>
-                    </form>
-                </td>
+                <th>Responder</th>
+                <th>Listing Title</th>
+                <th>Message</th>
+                <th>Offer Price</th>
+                <th>Sent At</th>
+                <th>Actions</th>
             </tr>
-        @empty
-            <tr><td colspan="6" class="text-center">No listing responses found.</td></tr>
-        @endforelse
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @forelse($listingResponses as $response)
+                <tr>
+                    <td>{{ $response->user->name ?? 'Unknown' }}</td>
+                    <td>{{ $response->item->title ?? 'Deleted Listing' }}</td>
+                    <td>{{ Str::limit($response->message, 50) }}</td>
+                    <td>{{ $response->offer_price ? '$' . number_format($response->offer_price, 2) : 'N/A' }}</td>
+                    <td>{{ $response->created_at->format('M d, Y H:i') }}</td>
+                    <td>
+                        <form action="{{ route('admin.responses.listing.delete', $response->id) }}" method="POST" onsubmit="return confirm('Delete this listing response?');">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn-delete">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            @empty
+                <tr><td colspan="6" class="text-center">No listing responses found.</td></tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
+
+{{-- Wishlist Responses Tab --}}
+<div id="wishlist-tab" style="display:none;">
+    <h3 class="section-title">Wishlist Responses</h3>
+    <table class="clean-table">
+        <thead>
+            <tr>
+                <th>Responder</th>
+                <th>Wishlist Title</th>
+                <th>Message</th>
+                <th>Offer Price</th>
+                <th>Sent At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($wishlistResponses as $response)
+                <tr>
+                    <td>{{ $response->user->name ?? 'Unknown' }}</td>
+                    <td>{{ $response->wishlist->title ?? 'Deleted Wishlist' }}</td>
+                    <td>{{ Str::limit($response->message, 50) }}</td>
+                    <td>{{ $response->offer_price ? '$' . number_format($response->offer_price, 2) : 'N/A' }}</td>
+                    <td>{{ $response->created_at->format('M d, Y H:i') }}</td>
+                    <td>
+                        <form action="{{ route('admin.responses.wishlist.delete', $response->id) }}" method="POST" onsubmit="return confirm('Delete this wishlist response?');">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn-delete">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            @empty
+                <tr><td colspan="6" class="text-center">No wishlist responses found.</td></tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function showTab(tab) {
+        document.getElementById('wishlist-tab').style.display = (tab === 'wishlist') ? 'block' : 'none';
+        document.getElementById('listing-tab').style.display = (tab === 'listing') ? 'block' : 'none';
+
+        const buttons = document.querySelectorAll('.tab-buttons button');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        if (tab === 'wishlist') buttons[1].classList.add('active');
+        if (tab === 'listing') buttons[0].classList.add('active');
+    }
+</script>
 
 @endsection
