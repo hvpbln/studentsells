@@ -39,8 +39,13 @@
                 <span class="badge bg-secondary">{{ $item->status }}</span>
             </h5>
 
-            <p>Posted by <strong>{{ $item->user->name ?? 'Unknown' }}</strong></p>
-
+            <p>Posted by 
+                <strong>
+                    <a href="{{ route('users.show', $item->user_id) }}">
+                        {{ $item->user->name ?? 'Unknown' }}
+                    </a>
+                </strong>
+            </p>
             <p class="text-muted">{{ $item->description }}</p>
 
             <div class=list-img>

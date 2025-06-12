@@ -160,7 +160,7 @@
         <div class="search-box">
             <div class="box">🔍</div>
         </div>
-        <div class="icon"><a href="#">👤</a></div>
+        <div class="icon"><a href="{{ route('student.profile') }}">👤</a></div>
         </div>
     </header>
         <div class="container mt-4">

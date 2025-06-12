@@ -71,7 +71,11 @@
         <div class="wishlist-card position-relative">
             <div class="d-flex justify-content-between">
                 <div class="name">
-                    <strong>{{ $wishlist->user->name ?? 'Unknown' }}</strong>
+                        <strong>
+                        <a href="{{ route('users.show', $wishlist->user_id) }}">
+                            {{ $wishlist->user->name ?? 'Unknown' }}
+                        </a>
+                    </strong>
                 </div>
                 @if(Auth::id() === $wishlist->user_id)
                 
