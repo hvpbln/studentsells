@@ -10,6 +10,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\WishlistResponseController;
 use App\Http\Controllers\ListingResponseController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
 
@@ -51,6 +52,8 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware([StudentMiddleware::class])->group(function () {
         Route::get('/student/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
 
+        Route::get('/student/profile', [StudentController::class, 'profile'])->name('student.profile');
+
         Route::resource('items', ItemController::class);
         Route::post('items/{id}/status', [ItemController::class, 'updateStatus'])->name('items.updateStatus');
         Route::get('/items/{item}/respond', [ItemController::class, 'respond'])->name('listings.respond');
@@ -66,4 +69,6 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/items/{item}/respond', [ListingResponseController::class, 'store'])->name('items.sendresponse');
     });
 
+    // Public profile route for viewing other users' listings and wishlists
+    Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
 });
