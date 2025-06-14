@@ -31,7 +31,7 @@
         <label>Confirm Password:</label><br>
         <input type="password" name="password_confirmation" required><br><br>
 
-        <label>Profile Photo (optional):</label><br>
+        <label>Profile Photo:</label><br>
         <input type="file" name="profile_photo"><br><br>
 
         <button type="submit">Register</button>

@@ -5,18 +5,30 @@
     <!-- Wishlist Card -->
     <div class="card shadow-lg border-0 mb-4">
         <div class="card-body">
-            <h2 class="card-title mb-2">
+            <h2 class="card-title mb-3">
                 <i class="bi bi-star-fill text-warning me-2"></i>{{ $wishlist->title }}
             </h2>
 
-            <p class="text-muted mb-1">
-                <i class="bi bi-person-circle me-1"></i>
-                <strong>Posted by:            
-                <a href="{{ route('users.show', $wishlist->user_id) }}">
-                {{ $wishlist->user->name ?? 'Unknown' }}
-                </a>
-                </strong>
-            </p>
+            <!-- Consistent User Info Layout (Matches Listing Style) -->
+            <div class="d-flex align-items-center mb-3">
+                <img src="{{ $wishlist->user->profile_photo ? asset('storage/' . $wishlist->user->profile_photo) : asset('storage/profile_photos/placeholder_pfp.jpg') }}"
+                     alt="Profile Photo"
+                     class="rounded-circle me-3"
+                     style="width: 64px; height: 64px; object-fit: cover;">
+
+                <div>
+                    <p class="mb-1">
+                        <strong>
+                            <a href="{{ route('users.show', $wishlist->user_id) }}">
+                                {{ $wishlist->user->name ?? 'Unknown' }}
+                            </a>
+                        </strong>
+                    </p>
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('messages.show', ['userId' => $wishlist->user_id, 'wishlist_id' => $wishlist->id]) }}"class="btn btn-sm btn-outline-secondary">Chat</a>
+                    </div>
+                </div>
+            </div>
 
             <p class="mb-1">
                 <i class="bi bi-cash-coin me-1"></i>

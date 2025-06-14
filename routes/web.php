@@ -12,6 +12,7 @@ use App\Http\Controllers\WishlistResponseController;
 use App\Http\Controllers\ListingResponseController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\MessageController;
 
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
 
@@ -55,6 +56,8 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/student/profile', [StudentController::class, 'profile'])->name('student.profile');
 
+        Route::post('/profile/update-photo', [UserController::class, 'updatePhoto'])->name('profile.updatePhoto');
+
         Route::resource('items', ItemController::class);
         Route::post('items/{id}/status', [ItemController::class, 'updateStatus'])->name('items.updateStatus');
         Route::get('/items/{item}/respond', [ItemController::class, 'respond'])->name('listings.respond');
@@ -68,6 +71,10 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/items/{item}/respond', [ListingResponseController::class, 'create'])->name('items.respond');
         Route::post('/items/{item}/respond', [ListingResponseController::class, 'store'])->name('items.sendresponse');
+
+        Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
+        Route::get('/messages/{userId}', [MessageController::class, 'show'])->name('messages.show');
+        Route::post('/messages', [MessageController::class, 'store'])->name('messages.store');
     });
 
     // Public profile route for viewing other users' listings and wishlists

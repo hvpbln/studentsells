@@ -53,8 +53,8 @@
         margin-bottom: 40px;
     }
     .profile-header img {
-        width: 100px;
-        height: 100px;
+        width: 192px;
+        height: 192px;
         border-radius: 50%;
         object-fit: cover;
         margin-right: 20px;
@@ -82,7 +82,7 @@
 
     {{-- Profile Header --}}
     <div class="profile-header">
-        <img src="{{ asset('storage/' . ($user->profile_photo ?? 'default.png')) }}" alt="Profile Photo">
+        <img src="{{ asset('storage/' . ($user->profile_photo ?? 'storage/profile_photos/placeholder_pfp.jpg')) }}" alt="Profile Photo">
         <div>
             <h2>{{ $user->name }}</h2>
             <p class="text-muted">{{ $user->email }}</p>

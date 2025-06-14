@@ -25,9 +25,15 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|ends_with:@students.nu-laguna.edu.ph|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
+            'profile_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ], [
             'email.ends_with' => 'Registration is allowed only with a valid NU Laguna student email.',
         ]);
+
+        $profilePath = null;
+        if ($request->hasFile('profile_photo')) {
+            $profilePath = $request->file('profile_photo')->store('profile_photos', 'public');
+        }
 
         User::create([
             'name' => $request->name,
@@ -35,6 +41,7 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
             'role' => 'student',
             'status' => 'pending',
+            'profile_photo' => $profilePath,
         ]);
 
         return redirect()->route('login')->with('success', 'Registered! Awaiting admin approval.');

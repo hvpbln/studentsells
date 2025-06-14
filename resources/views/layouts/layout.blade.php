@@ -148,7 +148,7 @@
             <a href="{{ route('student.dashboard') }}">Home</a>
             <a href="{{ route('items.index') }}">Shop</a>
             <a href="{{ route('wishlists.index') }}">Wishlist</a>
-            <a href="#">Message</a>
+            <a href="{{ route('messages.index') }}">Message</a>
             <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
         </nav>
 
