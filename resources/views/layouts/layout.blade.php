@@ -133,6 +133,9 @@
             margin-bottom: 20px;
         }
 
+        .bold-notification {
+            font-weight: bold;
+            }
     </style>
 </head>
 <body>
@@ -152,9 +155,9 @@
                 use App\Models\Message;
                 $unreadCount = auth()->check() ? Message::where('receiver_id', auth()->id())->where('is_read', false)->count() : 0;
             @endphp
-            <a href="{{ route('messages.index') }}">
-                Message @if ($unreadCount > 0) <span style="color:red;">🔴</span> @endif
-            </a>
+                <a href="{{ route('messages.index') }}" class="{{ $unreadCount > 0 ? 'bold-notification' : '' }}">
+                    Messages @if ($unreadCount > 0) <span style="color:red;">🔴</span> @endif
+                </a>
             <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
         </nav>
 
