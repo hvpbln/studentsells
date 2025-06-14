@@ -26,18 +26,18 @@
         </div>
 
         <p class="text-muted">{{ $item->description }}</p>
-        <p><strong>Price:</strong> ${{ $item->price }}</p>
+        <p><strong>Price:</strong> ₱{{ $item->price }}</p>
         <p><strong>Status:</strong> <span class="badge bg-secondary">{{ $item->status }}</span></p>
 
         @if($item->images->count())
-            <div class="row mt-3">
-                @foreach($item->images as $img)
-                    <div class="col-md-3 col-sm-6 mb-3">
-                        <img src="{{ asset('storage/' . $img->image_url) }}" class="img-fluid rounded shadow-sm" style="object-fit: cover; height: auto; width: 200px;">
-                    </div>
+            <div class="listing-images mb-2 d-flex flex-wrap justify-content-start gap-2">
+                @foreach($item->images as $image)
+                    <img src="{{ asset('storage/' . $image->image_url) }}" alt="Item Image"
+                        class="img-fluid" style="width: 300px; height: auto; object-fit: cover; border-radius: 10px;">
                 @endforeach
             </div>
         @endif
+
 
         <h3 class="mt-4">Responses</h3>
         @if($item->responses->count())
@@ -46,7 +46,7 @@
                     <div class="card-body">
                         <p><strong>{{ $response->user->name ?? 'User' }}:</strong> {{ $response->message }}</p>
                         @if($response->offer_price)
-                            <p><strong>Offer Price:</strong> ${{ number_format($response->offer_price, 2) }}</p>
+                            <p><strong>Offer Price:</strong> ₱{{ number_format($response->offer_price, 2) }}</p>
                         @endif
                         <small class="text-muted">Sent at {{ $response->created_at->format('M d, Y H:i') }}</small>
                     </div>
@@ -57,7 +57,7 @@
         @endif
 
         <a href="{{ route('items.respond', $item->id) }}" class="btn btn-primary mt-3">Respond to Listing</a>
-        <a href="{{ route('items.index') }}" class="btn btn-secondary mt-4">Back to List</a>
+        <a href="{{ route('items.index') }}" class="btn btn-secondary mt-3">Back to List</a>
     </div>
 </div>
 @endsection
