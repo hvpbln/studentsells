@@ -109,6 +109,9 @@
     <div class="tab-buttons">
         <button class="tab-btn active" onclick="switchTab('listings')">Listings</button>
         <button class="tab-btn" onclick="switchTab('wishlists')">Wishlists</button>
+        @if(Auth::id() === $user->id)
+            <a href="{{ route('student.profile.edit') }}" class="btn btn-outline-primary btn-sm float-end">Edit Profile</a>
+        @endif
     </div>
 
     {{-- Listings Section --}}

@@ -75,6 +75,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
         Route::get('/messages/{userId}', [MessageController::class, 'show'])->name('messages.show');
         Route::post('/messages', [MessageController::class, 'store'])->name('messages.store');
+
+        Route::get('/student/profile/edit', [UserController::class, 'editProfile'])->name('student.profile.edit');
+        Route::post('/student/profile/update', [UserController::class, 'updateProfile'])->name('student.profile.update');
     });
 
     // Public profile route for viewing other users' listings and wishlists
