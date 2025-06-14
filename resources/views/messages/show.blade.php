@@ -218,23 +218,30 @@
         @endforeach
     </div>
 
-    <form action="{{ route('messages.store') }}" method="POST" class="w-full">
-        @csrf
-        <input type="hidden" name="receiver_id" value="{{ $receiver->id }}">
-
-        <div class="chat-input-container">
-            <textarea
-                name="message_text"
-                required
-                placeholder="Type a message..."
-                maxlength="500"
-                class="chat-textarea"
-                oninput="this.style.height='auto'; this.style.height=this.scrollHeight + 'px';"
-            ></textarea>
-            <button type="submit" class="chat-send-button">
-                Send
-            </button>
+    @if ($receiver->status === 'banned')
+        <div style="text-align: center; font-style: italic;">
+            ⚠️ <strong>This user has been banned.</strong> You can no longer send messages to them.
         </div>
-    </form>
+    @else
+        <form action="{{ route('messages.store') }}" method="POST" class="w-full">
+            @csrf
+            <input type="hidden" name="receiver_id" value="{{ $receiver->id }}">
+
+            <div class="chat-input-container">
+                <textarea
+                    name="message_text"
+                    required
+                    placeholder="Type a message..."
+                    maxlength="500"
+                    class="chat-textarea"
+                    oninput="this.style.height='auto'; this.style.height=this.scrollHeight + 'px';"
+                ></textarea>
+                <button type="submit" class="chat-send-button">
+                    Send
+                </button>
+            </div>
+        </form>
+    @endif
+
 </div>
 @endsection
