@@ -53,7 +53,7 @@
     </div>
 
     <div class="mb-3">
-        <label for="images" class="form-label">Upload Additional Images (optional)</label>
+        <label for="images" class="form-label">Upload Additional Photo (optional)</label>
         <input type="file" id="images" name="images[]" multiple accept="image/*" class="form-control @error('images.*') is-invalid @enderror">
         @error('images.*')
             <div class="invalid-feedback">{{ $message }}</div>
