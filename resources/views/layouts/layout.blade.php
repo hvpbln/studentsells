@@ -179,5 +179,29 @@
 
 <script src="js/navbar.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function toggleDescription(id) {
+    const desc = document.getElementById(`desc-${id}`);
+    const toggleLink = document.getElementById(`toggle-${id}`);
+
+    if (desc.classList.contains('truncated')) {
+        desc.classList.remove('truncated');
+        toggleLink.innerText = 'See Less';
+    } else {
+        desc.classList.add('truncated');
+        toggleLink.innerText = 'See More';
+    }
+}
+</script>
+<script>
+function updateCharCount() {
+    const textarea = document.getElementById('description');
+    const count = document.getElementById('char-count');
+    const maxLength = 1000;
+    const remaining = maxLength - textarea.value.length;
+    count.textContent = `${remaining} characters remaining`;
+}
+window.onload = updateCharCount;
+</script>
 </body>
 </html>
