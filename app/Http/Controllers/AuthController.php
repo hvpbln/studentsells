@@ -30,10 +30,9 @@ class AuthController extends Controller
             'email.ends_with' => 'Registration is allowed only with a valid NU Laguna student email.',
         ]);
 
-        $profilePath = null;
-        if ($request->hasFile('profile_photo')) {
-            $profilePath = $request->file('profile_photo')->store('profile_photos', 'public');
-        }
+        $profilePath = $request->hasFile('profile_photo')
+            ? $request->file('profile_photo')->store('profile_photos', 'public')
+            : 'profile_photos/placeholder_pfp.jpg';
 
         User::create([
             'name' => $request->name,

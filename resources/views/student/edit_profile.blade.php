@@ -33,11 +33,10 @@
             <input type="file" name="profile_photo" class="form-control">
             @error('profile_photo')<small class="text-danger">{{ $message }}</small>@enderror
 
-            @if ($user->profile_photo)
-                <div class="mt-2">
-                    <img src="{{ asset('storage/' . $user->profile_photo) }}" alt="Profile Photo" width="100">
-                </div>
-            @endif
+            <div class="mt-2">
+                <img src="{{ asset('storage/' . ($user->profile_photo ?? 'profile_photos/placeholder_pfp.jpg')) }}"
+                     alt="Profile Photo" width="100">
+            </div>
         </div>
 
         <button type="submit" class="btn btn-primary">Save Changes</button>
