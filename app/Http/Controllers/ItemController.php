@@ -88,19 +88,23 @@ class ItemController extends Controller
 
         $item->update($request->only(['title', 'description', 'price', 'status']));
 
-        if ($request->hasFile('images')) {
-            // Delete old images from storage and DB
-            foreach ($item->images as $image) {
-                Storage::disk('public')->delete($image->image_url);
-                $image->delete();
+        if ($request->has('delete_images')) {
+            foreach ($request->input('delete_images') as $imageId) {
+                $image = $item->images()->where('id', $imageId)->first();
+                if ($image) {
+                    Storage::disk('public')->delete($image->image_url);
+                    $image->delete();
+                }
             }
+        }
 
-            // Store new images
-            foreach ($request->file('images') as $imageFile) {
-                $path = $imageFile->store('items', 'public');
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $img) {
+                $path = $img->store('items', 'public');
                 $item->images()->create(['image_url' => $path]);
             }
         }
+
 
         return redirect()->route('items.index')->with('success', 'Listing updated successfully.');
     }
