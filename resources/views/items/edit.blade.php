@@ -12,8 +12,10 @@
     </div>
 
     <div class="mb-2">
-        <textarea name="description" class="form-control">{{ old('description', $item->description) }}</textarea>
+        <textarea name="description" class="form-control" id="description" maxlength="1000" oninput="updateCharCount()">{{ old('description', $item->description) }}</textarea>
+        <small id="char-count" class="text-muted">1000 characters remaining</small>
     </div>
+
 
     <div class="mb-2">
         <input type="number" name="price" step="0.01" class="form-control" value="{{ old('price', $item->price) }}">
@@ -33,14 +35,17 @@
     </div>
 
     @if($item->images->count())
-        <div class="mb-2">
-            <label>Current Images:</label>
-            <div class="d-flex flex-wrap">
-                @foreach($item->images as $image)
-                    <img src="{{ asset('storage/' . $image->image_url) }}" alt="Image" 
-                         class="img-thumbnail me-2 mb-2" style="width: 120px;">
-                @endforeach
-            </div>
+        <h5>Current Images:</h5>
+        <div class="d-flex flex-wrap gap-3 mb-4">
+            @foreach($item->images as $image)
+                <div class="position-relative" style="width: 120px;">
+                    <img src="{{ asset('storage/' . $image->image_url) }}" class="img-fluid rounded" style="width: 100%; height: auto;">
+                    <label class="me-3">
+                        <input type="checkbox" name="delete_images[]" value="{{ $image->id }}">
+                        Delete
+                    </label>
+                </div>
+            @endforeach
         </div>
     @endif
 
