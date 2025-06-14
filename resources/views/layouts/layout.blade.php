@@ -148,7 +148,13 @@
             <a href="{{ route('student.dashboard') }}">Home</a>
             <a href="{{ route('items.index') }}">Shop</a>
             <a href="{{ route('wishlists.index') }}">Wishlist</a>
-            <a href="{{ route('messages.index') }}">Message</a>
+            @php
+                use App\Models\Message;
+                $unreadCount = auth()->check() ? Message::where('receiver_id', auth()->id())->where('is_read', false)->count() : 0;
+            @endphp
+            <a href="{{ route('messages.index') }}">
+                Message @if ($unreadCount > 0) <span style="color:red;">🔴</span> @endif
+            </a>
             <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
         </nav>
 

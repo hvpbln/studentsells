@@ -49,6 +49,11 @@
         background-color: #f3f4f6;
     }
 
+    .unread-message {
+    font-weight: bold;
+    background-color: #fefce8;
+    }
+
 </style>
 
 
@@ -98,17 +103,21 @@
                 $isBanned = $receiver->status === 'banned';
                 $isOwnMessage = $lastMessage->sender_id === auth()->id();
                 $profilePhoto = $receiver->profile_photo ? asset('storage/' . $receiver->profile_photo) : asset('storage/profile_photos/placeholder_pfp.jpg');
+                $hasUnread = $messages->where('sender_id', $receiver->id)->where('is_read', false)->count() > 0;
             @endphp
 
             <a href="{{ route('messages.show', $receiver->id) }}" class="block rounded-lg transition">
-                <div class="inbox-message-row">
+                <div class="inbox-message-row {{ $hasUnread ? 'unread-message' : '' }}">
                     <div class="inbox-message-info">
-                        <img src="{{ $receiver->profile_photo ? asset('storage/' . $receiver->profile_photo) : asset('storage/profile_photos/placeholder_pfp.jpg') }}" class="inbox-profile-photo" alt="PFP">
+                        <img src="{{ $profilePhoto }}" class="inbox-profile-photo" alt="PFP">
                         <div>
                             <div class="flex items-center space-x-2 font-semibold">
                                 {{ $receiver->name }}
                                 @if ($isBanned)
                                     <span class="text-sm font-semibold text-red-600">(Banned)</span>
+                                @endif
+                                @if ($hasUnread)
+                                    <span class="text-sm text-red-600 font-bold ml-2">🔴</span>
                                 @endif
                             </div>
                             <div class="text-content">

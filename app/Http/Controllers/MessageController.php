@@ -18,7 +18,7 @@ class MessageController extends Controller
 
         $conversations = Message::where(function ($query) use ($authId) {
                 $query->where('sender_id', $authId)
-                    ->orWhere('receiver_id', $authId);
+                      ->orWhere('receiver_id', $authId);
             })
             ->with(['sender', 'receiver'])
             ->orderBy('created_at')
@@ -57,6 +57,12 @@ class MessageController extends Controller
         ->with(['sender', 'receiver'])
         ->orderBy('created_at')
         ->get();
+
+        // Mark as read
+        Message::where('sender_id', $userId)
+            ->where('receiver_id', $authId)
+            ->where('is_read', false)
+            ->update(['is_read' => true]);
 
         $item = null;
         $wishlist = null;
@@ -115,7 +121,6 @@ class MessageController extends Controller
         return view('messages.show', compact('messages', 'receiver', 'item', 'wishlist', 'showPreview'));
     }
 
-
     public function store(Request $request)
     {
         $request->validate([
@@ -135,5 +140,4 @@ class MessageController extends Controller
 
         return back()->with('success', 'Message sent.');
     }
-
 }
