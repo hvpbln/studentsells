@@ -34,11 +34,11 @@
                 <i class="bi bi-cash-coin me-1"></i>
                 <strong>Price Range:</strong>
                 @if($wishlist->price_range_min)
-                    ${{ number_format($wishlist->price_range_min, 2) }}
+                    ₱{{ number_format($wishlist->price_range_min, 2) }}
                 @endif
                 -
                 @if($wishlist->price_range_max)
-                    ${{ number_format($wishlist->price_range_max, 2) }}
+                    ₱{{ number_format($wishlist->price_range_max, 2) }}
                 @endif
             </p>
 
@@ -82,7 +82,7 @@
                         @if($response->offer_price)
                             <p class="mb-1">
                                 <i class="bi bi-currency-dollar me-1 text-success"></i>
-                                <strong>Offer Price:</strong> ${{ number_format($response->offer_price, 2) }}
+                                <strong>Offer Price:</strong> ₱{{ number_format($response->offer_price, 2) }}
                             </p>
                         @endif
 
