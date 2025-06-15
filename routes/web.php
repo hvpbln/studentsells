@@ -13,6 +13,7 @@ use App\Http\Controllers\ListingResponseController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\NotificationController;
 
 Route::get('/', [AuthController::class, 'showLogin'])->name('login');
 
@@ -78,6 +79,10 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/student/profile/edit', [UserController::class, 'editProfile'])->name('student.profile.edit');
         Route::post('/student/profile/update', [UserController::class, 'updateProfile'])->name('student.profile.update');
+
+        Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+        Route::post('/notifications/mark-as-read', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+        Route::get('/notifications/redirect/{id}', [NotificationController::class, 'showAndMarkAsRead'])->name('notifications.redirect');
     });
 
     // Public profile route for viewing other users' listings and wishlists

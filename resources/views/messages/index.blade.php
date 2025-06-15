@@ -209,9 +209,13 @@
                             @endif
                         </div>
                     </div>
-                    <div class="timestamp">
-                        {{ $lastMessage->created_at->format('m/d/y H:i') }}
-                    </div>
+                        <div class="timestamp text-end">
+                            @if ($lastMessage->created_at->gt(\Carbon\Carbon::now()->subDay()))
+                                {{ $lastMessage->created_at->diffForHumans() }}
+                            @else
+                                {{ $lastMessage->created_at->format('F j') }}
+                            @endif
+                        </div>
                 </div>
             </a>
         @empty

@@ -42,7 +42,7 @@
         <h3 class="mt-4">Responses</h3>
         @if($item->responses->count())
             @foreach($item->responses as $response)
-                <div class="card mb-2">
+                <div id="response-{{ $response->id }}" class="card mb-2 response-card">
                     <div class="card-body">
                         <p><strong>{{ $response->user->name ?? 'User' }}:</strong> {{ $response->message }}</p>
                         @if($response->offer_price)
@@ -60,4 +60,21 @@
         <a href="{{ route('items.index') }}" class="btn btn-secondary mt-3">Back to List</a>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const hash = window.location.hash;
+        if (hash && hash.startsWith('#response-')) {
+            const el = document.querySelector(hash);
+            if (el) {
+                el.style.transition = 'background-color 0.1s ease';
+                el.style.backgroundColor = '#fcf7c2';
+                setTimeout(() => {
+                    el.style.backgroundColor = '';
+                }, 1500);
+            }
+        }
+    });
+</script>
+
 @endsection

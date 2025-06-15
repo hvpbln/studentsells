@@ -133,7 +133,7 @@
 
         @if($wishlist->responses->count())
             @foreach($wishlist->responses as $response)
-                <div class="response-card">
+                <div id="response-{{ $response->id }}" class="response-card">
                     <p class="mb-1">
                         <strong><i class="bi bi-person-circle me-1"></i>{{ $response->user->name ?? 'User' }}:</strong>
                         {{ $response->message }}
@@ -164,4 +164,21 @@
         </a>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const hash = window.location.hash;
+        if (hash && hash.startsWith('#response-')) {
+            const el = document.querySelector(hash);
+            if (el) {
+                el.style.transition = 'background-color 0.1s ease';
+                el.style.backgroundColor = '#fcf7c2';
+                setTimeout(() => {
+                    el.style.backgroundColor = '';
+                }, 1500);
+            }
+        }
+    });
+</script>
+
 @endsection

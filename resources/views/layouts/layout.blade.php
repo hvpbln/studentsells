@@ -134,19 +134,30 @@
             <a href="{{ route('student.dashboard') }}">Home</a>
             <a href="{{ route('items.index') }}">Shop</a>
             <a href="{{ route('wishlists.index') }}">Wishlist</a>
+
             @php
                 use App\Models\Message;
-                $unreadCount = auth()->check() ? Message::where('receiver_id', auth()->id())->where('is_read', false)->count() : 0;
+                use App\Models\Notification;
+                $unreadMsgCount = auth()->check() ? Message::where('receiver_id', auth()->id())->where('is_read', false)->count() : 0;
+                $unreadNotifCount = auth()->check() ? Notification::where('user_id', auth()->id())->where('is_read', false)->count() : 0;
             @endphp
-                <a href="{{ route('messages.index') }}" class="{{ $unreadCount > 0 ? 'bold-notification' : '' }}">
-                    Messages @if ($unreadCount > 0) <span style="color:red;">🔴</span> @endif
-                </a>
-            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-        </nav>
 
-        <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display: none;">
-            @csrf
-        </form>
+            <a href="{{ route('messages.index') }}" class="{{ $unreadMsgCount > 0 ? 'bold-notification' : '' }}">
+                Messages @if ($unreadMsgCount > 0) <span style="color:red;">🔴</span> @endif
+            </a>
+
+            <a href="{{ route('notifications.index') }}" class="{{ $unreadNotifCount > 0 ? 'bold-notification' : '' }}">
+                Notifications @if ($unreadNotifCount > 0) <span style="color:red;">🔴</span> @endif
+            </a>
+
+            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                Logout
+            </a>
+
+            <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display: none;">
+                @csrf
+            </form>
+        </nav>
 
         <div class="right-section">
             <div class="icon">
