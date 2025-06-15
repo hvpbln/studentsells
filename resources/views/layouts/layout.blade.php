@@ -84,35 +84,14 @@
         gap: 15px;
         }
 
-        .search-box {
-        display: flex;
-        align-items: center;
-        background-color: #d9dbf0;
-        padding: 5px 15px;
-        border-radius: 20px;
-        }
-
-        .search-box input {
-        border: none;
-        background: transparent;
-        outline: none;
-        padding-left: 100px;
-        }
-
         .icon {
-        width: 30px;
-        height: 30px;
+        width: 40px;
+        height: 40px;
         border: 2px solid #aaa;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        }
-
-        .box {
-        width: 150px;
-        height: 30px;
-        border-radius: 10%;
         }
         
         .card-display {
@@ -166,11 +145,13 @@
         </form>
 
         <div class="right-section">
-        <div class="search-box">
-            <div class="box">🔍</div>
+            <div class="icon">
+                <a href="{{ route('student.profile') }}">
+                    <img src="{{ asset('pictures/profile.png') }}" alt="Profile" style="width: 100%; height: 100%; object-fit: cover;">
+                </a>
+            </div>
         </div>
-        <div class="icon"><a href="{{ route('student.profile') }}">👤</a></div>
-        </div>
+
     </header>
         <div class="container mt-4">
             
