@@ -31,7 +31,7 @@
         .logo-circle {
             width: 60px;
             height: 60px;
-            background-color: #e6f49c;
+            background-color: #daf3a7;
             border-radius: 50%;
             margin-right: -30px;
             padding-left: 10px;
