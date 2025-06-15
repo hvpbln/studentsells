@@ -198,7 +198,9 @@
                                 <span class="text-sm text-red-600">(Banned)</span>
                             @endif
                             @if ($hasUnread)
-                                <span class="text-sm text-red-600">🔴</span>
+                                <span class="text-sm text-red-600" style="line-height: 1;">
+                                    <span style="display:inline-block; transform: scale(0.75); transform-origin: center;">🔴</span>
+                                </span>
                             @endif
                         </div>
                         <div class="preview-text">

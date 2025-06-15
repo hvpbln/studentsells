@@ -149,7 +149,9 @@
                 </div>
 
                 @if ($isUnread)
-                    <span style="position: absolute; top: 10px; right: 12px; font-size: 1.25rem; color: red;">🔴</span>
+                    <span style="position: absolute; top: 10px; right: 12px; color: red; line-height: 1;">
+                        <span style="display: inline-block; transform: scale(0.75); transform-origin: center;">🔴</span>
+                    </span>
                 @endif
             </a>
         @endforeach

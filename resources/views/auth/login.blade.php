@@ -3,6 +3,8 @@
 @section('title', 'Login')
 
 @section('content')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Shrikhand&family=Great+Vibes&display=swap');
 
@@ -10,7 +12,7 @@
         margin: 0;
         padding: 0;
         height: 100%;
-        overflow: hidden; /* prevents scrollbar */
+        overflow: hidden;
         font-family: 'Montserrat', sans-serif;
         background-color: #d9dbf0;
     }
@@ -19,7 +21,7 @@
         display: flex;
         height: calc(100vh - 60px);
         width: 100%;
-        overflow: hidden; /* ensures internal content doesn't scroll */
+        overflow: hidden;
     }
 
     .left-section, .right-section {
@@ -76,7 +78,7 @@
     }
 
     input[type="email"],
-    input[type="password"] {
+    .password-input {
         width: 100%;
         padding: 0.65rem 1rem;
         margin-bottom: 1.3rem;
@@ -85,6 +87,11 @@
         background-color: #f1f1f1;
         font-size: 1rem;
         box-sizing: border-box;
+    }
+
+    input[type="password"]::-ms-reveal,
+    input[type="password"]::-webkit-credentials-auto-fill-button {
+        display: none !important;
     }
 
     .form-button,
@@ -205,25 +212,26 @@
         color: #c62828;
     }
 
-    @media (max-width: 768px) {
-        html, body {
-            overflow: auto;
-        }
+    .password-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
 
-        .login-page {
-            flex-direction: column;
-            height: auto;
-        }
+    .password-wrapper input {
+        padding-right: 2.5rem;
+    }
 
-        .left-section, .right-section {
-            width: 100%;
-            padding: 2rem 1rem;
-            margin-top: 0;
-        }
-
-        .right-section {
-            order: -1;
-        }
+    .toggle-password {
+        position: absolute;
+        right: 1rem;
+        top: 33%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #666;
+        font-size: 1.1rem;
+        user-select: none;
+        display: none;
     }
 </style>
 
@@ -254,7 +262,12 @@
                 <input type="email" name="email" placeholder="user@students.nu-laguna.edu.ph" required autofocus>
 
                 <label for="password">PASSWORD</label>
-                <input type="password" name="password" required>
+                <div class="password-wrapper">
+                    <input type="password" name="password" id="password" class="password-input" required>
+                        <span class="toggle-password" id="togglePassword">
+                            <i class="fa-solid fa-eye"></i>
+                        </span>
+                </div>
 
                 <button type="submit" class="form-button">Log In</button>
             </form>
@@ -277,4 +290,40 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const passwordInput = document.getElementById('password');
+        const toggleIcon = document.getElementById('togglePassword');
+        const icon = toggleIcon.querySelector('i');
+        let iconClicked = false;
+
+        passwordInput.addEventListener('focus', () => {
+            toggleIcon.style.display = 'block';
+        });
+
+        passwordInput.addEventListener('blur', () => {
+            setTimeout(() => {
+                if (!iconClicked && document.activeElement !== toggleIcon) {
+                    toggleIcon.style.display = 'none';
+                }
+                iconClicked = false;
+            }, 100);
+        });
+
+        toggleIcon.addEventListener('mousedown', () => {
+            iconClicked = true;
+        });
+
+        toggleIcon.addEventListener('click', () => {
+            const isPassword = passwordInput.type === 'password';
+            passwordInput.type = isPassword ? 'text' : 'password';
+
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+
+            passwordInput.focus();
+        });
+    });
+</script>
 @endsection

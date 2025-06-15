@@ -143,11 +143,21 @@
             @endphp
 
             <a href="{{ route('messages.index') }}" class="{{ $unreadMsgCount > 0 ? 'bold-notification' : '' }}">
-                Messages @if ($unreadMsgCount > 0) <span style="color:red;">🔴</span> @endif
+                Messages 
+                @if ($unreadMsgCount > 0)
+                    <span style="color: red; line-height: 1;">
+                        <span style="display: inline-block; transform: scale(0.75); transform-origin: center;">🔴</span>
+                    </span>
+                @endif
             </a>
 
             <a href="{{ route('notifications.index') }}" class="{{ $unreadNotifCount > 0 ? 'bold-notification' : '' }}">
-                Notifications @if ($unreadNotifCount > 0) <span style="color:red;">🔴</span> @endif
+                Notifications 
+                @if ($unreadNotifCount > 0)
+                    <span style="color: red; line-height: 1;">
+                        <span style="display: inline-block; transform: scale(0.75); transform-origin: center;">🔴</span>
+                    </span>
+                @endif
             </a>
 
             <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
