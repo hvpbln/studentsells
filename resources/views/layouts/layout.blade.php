@@ -84,35 +84,14 @@
         gap: 15px;
         }
 
-        .search-box {
-        display: flex;
-        align-items: center;
-        background-color: #d9dbf0;
-        padding: 5px 15px;
-        border-radius: 20px;
-        }
-
-        .search-box input {
-        border: none;
-        background: transparent;
-        outline: none;
-        padding-left: 100px;
-        }
-
         .icon {
-        width: 30px;
-        height: 30px;
+        width: 40px;
+        height: 40px;
         border: 2px solid #aaa;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        }
-
-        .box {
-        width: 150px;
-        height: 30px;
-        border-radius: 10%;
         }
         
         .card-display {
@@ -137,6 +116,10 @@
             font-weight: bold;
             }
     </style>
+
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
+
 </head>
 <body>
     <header>
@@ -151,26 +134,39 @@
             <a href="{{ route('student.dashboard') }}">Home</a>
             <a href="{{ route('items.index') }}">Shop</a>
             <a href="{{ route('wishlists.index') }}">Wishlist</a>
+
             @php
                 use App\Models\Message;
-                $unreadCount = auth()->check() ? Message::where('receiver_id', auth()->id())->where('is_read', false)->count() : 0;
+                use App\Models\Notification;
+                $unreadMsgCount = auth()->check() ? Message::where('receiver_id', auth()->id())->where('is_read', false)->count() : 0;
+                $unreadNotifCount = auth()->check() ? Notification::where('user_id', auth()->id())->where('is_read', false)->count() : 0;
             @endphp
-                <a href="{{ route('messages.index') }}" class="{{ $unreadCount > 0 ? 'bold-notification' : '' }}">
-                    Messages @if ($unreadCount > 0) <span style="color:red;">🔴</span> @endif
-                </a>
-            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+
+            <a href="{{ route('messages.index') }}" class="{{ $unreadMsgCount > 0 ? 'bold-notification' : '' }}">
+                Messages @if ($unreadMsgCount > 0) <span style="color:red;">🔴</span> @endif
+            </a>
+
+            <a href="{{ route('notifications.index') }}" class="{{ $unreadNotifCount > 0 ? 'bold-notification' : '' }}">
+                Notifications @if ($unreadNotifCount > 0) <span style="color:red;">🔴</span> @endif
+            </a>
+
+            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                Logout
+            </a>
+
+            <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display: none;">
+                @csrf
+            </form>
         </nav>
 
-        <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display: none;">
-            @csrf
-        </form>
-
         <div class="right-section">
-        <div class="search-box">
-            <div class="box">🔍</div>
+            <div class="icon">
+                <a href="{{ route('student.profile') }}">
+                    <img src="{{ asset('pictures/profile.png') }}" alt="Profile" style="width: 100%; height: 100%; object-fit: cover;">
+                </a>
+            </div>
         </div>
-        <div class="icon"><a href="{{ route('student.profile') }}">👤</a></div>
-        </div>
+
     </header>
         <div class="container mt-4">
             
@@ -179,5 +175,30 @@
 
 <script src="js/navbar.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function toggleDescription(id) {
+    const desc = document.getElementById(`desc-${id}`);
+    const toggleLink = document.getElementById(`toggle-${id}`);
+
+    if (desc.classList.contains('truncated')) {
+        desc.classList.remove('truncated');
+        toggleLink.innerText = 'See Less';
+    } else {
+        desc.classList.add('truncated');
+        toggleLink.innerText = 'See More';
+    }
+}
+</script>
+<script>
+function updateCharCount() {
+    const textarea = document.getElementById('description');
+    const count = document.getElementById('char-count');
+    const maxLength = 1000;
+    const remaining = maxLength - textarea.value.length;
+    count.textContent = `${remaining} characters remaining`;
+}
+window.onload = updateCharCount;
+</script>
+<script src="{{ asset('js/user-profile.js') }}"></script>
 </body>
 </html>

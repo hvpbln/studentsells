@@ -81,4 +81,8 @@ class User extends Authenticatable
         return $this->ratingsReceived()->where('rater_id', $userId)->exists();
     }
 
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
 }

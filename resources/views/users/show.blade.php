@@ -22,6 +22,7 @@
     }
     .tab-content.active {
         display: block;
+        width: 600px;
     }
     .card-section {
         background-color: #f9f9f2;
@@ -50,7 +51,7 @@
     .profile-header {
         display: flex;
         align-items: center;
-        margin-bottom: 40px;
+        margin-bottom: 20px;
     }
     .profile-header img {
         width: 192px;
@@ -76,6 +77,25 @@
     .star-rating .star.selected {
         color: #ffc107;
     }
+
+    .btn {
+        margin-left: 20px;
+    }
+
+    .container2 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tab-buttons {
+        margin-bottom: 20px;
+    }
+
+    .mt-2 {
+        margin-left: 50px;
+    }
+
 </style>
 
 <div class="container">
@@ -106,155 +126,83 @@
             @endif
 
             {{-- Interactive Star Rating with Submit Button --}}
-            @if(Auth::check() && Auth::id() !== $user->id)
-                <br>
-                <p> Give Ratings </p>
-                <div class="star-rating mt-2" data-user-id="{{ $user->id }}">
-                    @for ($i = 1; $i <= 5; $i++)
-                        <span class="star" data-value="{{ $i }}">&#9733;</span>
-                    @endfor
-                </div>
-                <button id="submit-rating" class="btn btn-sm btn-primary mt-2" style="display:none;">Submit Rating</button>
-                <div id="rating-message" class="mt-2 text-success" style="display:none;"></div>
-            @endif
+            <div class="give-ratings">
+                @if(Auth::check() && Auth::id() !== $user->id)
+                    <br>
+                    <p> Give Ratings </p>
+                    <div class="star-rating mt-2" data-user-id="{{ $user->id }}">
+                        @for ($i = 1; $i <= 5; $i++)
+                            <span class="star" data-value="{{ $i }}">&#9733;</span>
+                        @endfor
+                        <button id="submit-rating" class="btn btn-outline-info btn-sm" style="display:none;">Submit Rating</button>
+                        <div id="rating-message" class="mt-2 text-success" style="display:none;"></div>
+                    </div>
+                    
+                @endif
+            </div>
+            
         </div>
     </div>
 
-    {{-- Tab Buttons --}}
-    <div class="tab-buttons">
-        <button class="tab-btn active" onclick="switchTab('listings')">Listings</button>
-        <button class="tab-btn" onclick="switchTab('wishlists')">Wishlists</button>
-    </div>
+    <div class="container2">
+            {{-- Tab Buttons --}}
+        <div class="tab-buttons">
+            <button class="tab-btn active" onclick="switchTab('listings')">Listings</button>
+            <button class="tab-btn" onclick="switchTab('wishlists')">Wishlists</button>
+        </div>
 
-    {{-- Listings --}}
-    <div id="listings" class="tab-content active">
-        <div class="section-title">Listings</div>
-        @forelse($user->items as $item)
-            <div class="card-section">
-                <h5>{{ $item->title }}</h5>
-                <div class="text-muted mb-2">{{ ucfirst($item->status) }} | ₱{{ number_format($item->price_range, 2) }}</div>
-                <p>{{ Str::limit($item->description, 150) }}</p>
-                @if($item->images->count())
-                    <div class="item-images d-flex mb-2">
-                        @foreach($item->images as $image)
-                            <img src="{{ asset('storage/' . $image->image_url) }}" alt="Item Image" class="img-thumbnail">
-                        @endforeach
+        {{-- Listings --}}
+        <div id="listings" class="tab-content active">
+            @forelse($user->items as $item)
+                <div class="card-section">
+                    <h5>{{ $item->title }}</h5>
+                    <div class="text-muted mb-2">{{ ucfirst($item->status) }} | ₱{{ number_format($item->price_range, 2) }}</div>
+                    <p>{{ Str::limit($item->description, 150) }}</p>
+                    @if($item->images->count())
+                        <div class="item-images d-flex mb-2">
+                            @foreach($item->images as $image)
+                                <img src="{{ asset('storage/' . $image->image_url) }}" alt="Item Image" class="img-thumbnail">
+                            @endforeach
+                        </div>
+                    @endif
+                    <div>
+                        <a href="{{ route('items.show', $item->id) }}" class="btn btn-outline-info btn-sm">View</a>
+                        <a href="{{ route('items.respond', $item->id) }}" class="btn btn-outline-info btn-sm">Respond</a>
+                        <a href="#" class="btn btn-contact btn-sm">Contact Poster</a>
                     </div>
-                @endif
-                <div>
-                    <a href="{{ route('items.show', $item->id) }}" class="btn btn-outline-info btn-sm">View</a>
-                    <a href="{{ route('items.respond', $item->id) }}" class="btn btn-outline-info btn-sm">Respond</a>
-                    <a href="#" class="btn btn-contact btn-sm">Contact Poster</a>
                 </div>
-            </div>
-        @empty
-            <p class="text-muted">No listings found.</p>
-        @endforelse
-    </div>
+            @empty
+                <p class="text-muted">No listings found.</p>
+            @endforelse
+        </div>
 
-    {{-- Wishlists --}}
-    <div id="wishlists" class="tab-content">
-        <div class="section-title">Wishlists</div>
-        @forelse($user->wishlists as $wishlist)
-            <div class="card-section">
-                <h5>{{ $wishlist->title }}</h5>
-                <div class="text-muted mb-2">{{ ucfirst($wishlist->status) }}</div>
-                <p>{{ Str::limit($wishlist->description, 150) }}</p>
-                @if($wishlist->images->count())
-                    <div class="wishlist-images d-flex mb-2">
-                        @foreach($wishlist->images as $image)
-                            <img src="{{ asset('storage/' . $image->image_url) }}" alt="Wishlist Image" class="img-thumbnail">
-                        @endforeach
+        {{-- Wishlists --}}
+        <div id="wishlists" class="tab-content">
+            @forelse($user->wishlists as $wishlist)
+                <div class="card-section">
+                    <h5>{{ $wishlist->title }}</h5>
+                    <div class="text-muted mb-2">{{ ucfirst($wishlist->status) }}</div>
+                    <p>{{ Str::limit($wishlist->description, 150) }}</p>
+                    @if($wishlist->images->count())
+                        <div class="wishlist-images d-flex mb-2">
+                            @foreach($wishlist->images as $image)
+                                <img src="{{ asset('storage/' . $image->image_url) }}" alt="Wishlist Image" class="img-thumbnail">
+                            @endforeach
+                        </div>
+                    @endif
+                    <div>
+                        <a href="{{ route('wishlists.show', $wishlist->id) }}" class="btn btn-outline-info btn-sm">View</a>
+                        <a href="{{ route('wishlists.responses.create', $wishlist->id) }}" class="btn btn-outline-info btn-sm">Respond</a>
+                        <a href="#" class="btn btn-contact btn-sm">Contact Seller</a>
                     </div>
-                @endif
-                <div>
-                    <a href="{{ route('wishlists.show', $wishlist->id) }}" class="btn btn-outline-info btn-sm">View</a>
-                    <a href="{{ route('wishlists.responses.create', $wishlist->id) }}" class="btn btn-outline-info btn-sm">Respond</a>
-                    <a href="#" class="btn btn-contact btn-sm">Contact Seller</a>
                 </div>
-            </div>
-        @empty
-            <p class="text-muted">No wishlists found.</p>
-        @endforelse
+            @empty
+                <p class="text-muted">No wishlists found.</p>
+            @endforelse
+        </div>
     </div>
+    
 
 </div>
-
-{{-- JavaScript --}}
-<script>
-    function switchTab(tabId) {
-        document.querySelectorAll('.tab-content').forEach(div => div.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-        event.target.classList.add('active');
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        const stars = document.querySelectorAll('.star-rating .star');
-        const submitButton = document.getElementById('submit-rating');
-        const message = document.getElementById('rating-message');
-        const userId = document.querySelector('.star-rating')?.dataset.userId;
-
-        if (!stars.length || !userId) return;
-
-        let selected = 0;
-
-        stars.forEach(star => {
-            star.addEventListener('mouseenter', function () {
-                highlightStars(parseInt(this.dataset.value));
-            });
-
-            star.addEventListener('mouseleave', function () {
-                highlightStars(selected);
-            });
-
-            star.addEventListener('click', function () {
-                selected = parseInt(this.dataset.value);
-                highlightStars(selected);
-                submitButton.style.display = 'inline-block';
-                message.style.display = 'none';
-            });
-        });
-
-        submitButton.addEventListener('click', function () {
-            if (selected === 0) return;
-
-            fetch(`/users/${userId}/rate`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ rating: selected })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    message.textContent = data.message;
-                    message.style.display = 'block';
-                    message.classList.remove('text-danger');
-                    submitButton.style.display = 'none';
-                } else {
-                    message.textContent = data.message || 'Rating failed';
-                    message.style.display = 'block';
-                    message.classList.add('text-danger');
-                }
-            })
-            .catch(() => {
-                message.textContent = 'Error submitting rating.';
-                message.style.display = 'block';
-                message.classList.add('text-danger');
-            });
-        });
-
-        function highlightStars(rating) {
-            stars.forEach(star => {
-                star.classList.remove('selected');
-                if (parseInt(star.dataset.value) <= rating) {
-                    star.classList.add('selected');
-                }
-            });
-        }
-    });
-</script>
+<script src="{{ asset('js/user-profile.js') }}"></script>
 @endsection

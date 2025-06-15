@@ -2,89 +2,171 @@
 
 @section('content')
 <style>
-    .inbox-profile-photo {
-        width: 64px;
-        height: 64px;
-        object-fit: cover;
-        border-radius: 9999px;
-        margin-top: 4px;
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        color: #1f2937;
     }
 
-    .inbox-message-row {
+    .inbox-container {
+        max-width: 800px;
+        margin: 4rem auto;
+        padding: 1rem;
+    }
+
+    .inbox-header-bar {
         display: flex;
         justify-content: space-between;
-        align-items: flex-start;
-        padding: 1.25rem;
-        border: 1px solid #d1d5db;
-        border-radius: 0.75rem;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        background-color: white;
-    }
-
-    .inbox-message-info {
-        display: flex;
+        align-items: center;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
         gap: 1rem;
-        align-items: flex-start;
     }
 
-    .text-content {
-        margin-top: 0.25rem;
-        font-size: 1.125rem;
-        color: #4b5563;
+    .inbox-header {
+        font-size: 2.5rem;
+        font-weight: 500;
     }
 
-    .inbox-message-timestamp {
-        font-size: 1rem;
-        color: #9ca3af;
-        white-space: nowrap;
-        margin-top: 0.25rem;
+    .inbox-search-form {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .inbox-search-form input {
+        width: 220px;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+    }
+
+    .inbox-search-form button {
+        background-color: #dbf4a7;
+        color: #838ab6;
+        border: none;
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .inbox-search-form button:hover {
+        background-color: #95c235;
+        color: #e5e5e9;
+    }
+
+    .search-results {
+        position: relative;
+        background-color: #f3f4f6;
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        padding: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .search-results button {
+        position: absolute;
+        top: 0.75rem;
+        right: 1rem;
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #ef4444;
+        background: none;
+        border: none;
+        cursor: pointer;
     }
 
     .inbox-thread a {
-        color: inherit;
+        display: block;
         text-decoration: none;
+        color: inherit;
     }
 
-    .inbox-thread a:hover {
+    .inbox-item {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1rem;
+        background-color: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: background-color 0.2s ease;
+        margin-top: 1rem;
+    }
+
+    .inbox-item:hover {
         background-color: #f3f4f6;
     }
 
-    .unread-message {
-    font-weight: bold;
-    background-color: #fefce8;
+    .inbox-item.unread-message {
+        background-color: #fefce8;
+        font-weight: bold;
     }
 
+    .profile-photo {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .message-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .message-info .name-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+    }
+
+    .message-info .preview-text {
+        margin-top: 0.25rem;
+        font-size: 0.95rem;
+        color: #4b5563;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .timestamp {
+        font-size: 0.85rem;
+        color: #9ca3af;
+        white-space: nowrap;
+    }
 </style>
 
+<div class="inbox-container">
+    <div class="inbox-header-bar">
+        <h3 class="inbox-header">Inbox</h3>
 
-<div class="container py-4">
-    <h2 class="text-xl font-bold mb-4">Inbox</h2>
-
-    <form method="GET" action="{{ route('messages.index') }}" class="mb-6 flex space-x-2">
-        <input type="text" name="search" placeholder="Search users..." value="{{ request('search') }}"
-            class="border px-4 py-2 rounded w-full">
-        <button type="submit" class="bg-blue-600 px-3 py-2 rounded">Search</button>
-    </form>
+        <form method="GET" action="{{ route('messages.index') }}" class="inbox-search-form">
+            <input type="text" name="search" placeholder="Search users..." value="{{ request('search') }}">
+            <button type="submit">Search</button>
+        </form>
+    </div>
 
     @if(request('search'))
-        <div id="searchResults" class="border border-gray-400 rounded p-4 bg-gray-50 mb-6 relative">
-            <button onclick="window.location.href='{{ route('messages.index') }}'"
-                class="absolute top-2 right-2 text-red-600 hover:text-red-800 font-bold text-xl">&times;</button>
-
+        <div id="searchResults" class="search-results">
+            <button onclick="window.location.href='{{ route('messages.index') }}'">&times;</button>
             <h3 class="text-md font-semibold mb-3">Search Results</h3>
-
-            @if($filteredUsers->count() === 0)
+            @if($filteredUsers->isEmpty())
                 <p>No users found.</p>
             @else
                 <div class="space-y-3 inbox-thread">
                     @foreach($filteredUsers as $user)
-                        <a href="{{ route('messages.show', $user->id) }}" class="block rounded-lg transition hover:bg-gray-100">
-                            <div class="p-4 border border-gray-300 rounded shadow bg-white flex items-center space-x-4">
-                                <img src="{{ $user->profile_photo ? asset('storage/' . $user->profile_photo) : asset('storage/profile_photos/placeholder_pfp.jpg') }}" class="inbox-profile-photo" alt="PFP">
-                                <div class="flex flex-col">
-                                    <span class="font-semibold text-gray-800">{{ $user->name }}</span>
+                        <a href="{{ route('messages.show', $user->id) }}" class="inbox-item">
+                            <img src="{{ $user->profile_photo ? asset('storage/' . $user->profile_photo) : asset('storage/profile_photos/placeholder_pfp.jpg') }}" class="profile-photo" alt="PFP">
+                            <div class="message-info">
+                                <div class="name-row">
+                                    {{ $user->name }}
                                     @if ($user->status === 'banned')
-                                        <span class="text-sm font-semibold text-red-600">(Banned)</span>
+                                        <span class="text-sm text-red-600">(Banned)</span>
                                     @endif
                                 </div>
                             </div>
@@ -95,48 +177,49 @@
         </div>
     @endif
 
-    <div class="space-y-4 inbox-thread">
+    <div class="space-y-3 inbox-thread">
         @forelse(collect($conversations)->sortByDesc(fn($messages) => $messages->last()->created_at) as $userId => $messages)
             @php
                 $lastMessage = $messages->last();
                 $receiver = $lastMessage->sender_id == auth()->id() ? $lastMessage->receiver : $lastMessage->sender;
                 $isBanned = $receiver->status === 'banned';
                 $isOwnMessage = $lastMessage->sender_id === auth()->id();
-                $profilePhoto = $receiver->profile_photo ? asset('storage/' . $receiver->profile_photo) : asset('storage/profile_photos/placeholder_pfp.jpg');
                 $hasUnread = $messages->where('sender_id', $receiver->id)->where('is_read', false)->count() > 0;
+                $profilePhoto = $receiver->profile_photo ? asset('storage/' . $receiver->profile_photo) : asset('storage/profile_photos/placeholder_pfp.jpg');
             @endphp
 
-            <a href="{{ route('messages.show', $receiver->id) }}" class="block rounded-lg transition">
-                <div class="inbox-message-row {{ $hasUnread ? 'unread-message' : '' }}">
-                    <div class="inbox-message-info">
-                        <img src="{{ $profilePhoto }}" class="inbox-profile-photo" alt="PFP">
-                        <div>
-                            <div class="flex items-center space-x-2 font-semibold">
-                                {{ $receiver->name }}
-                                @if ($isBanned)
-                                    <span class="text-sm font-semibold text-red-600">(Banned)</span>
-                                @endif
-                                @if ($hasUnread)
-                                    <span class="text-sm text-red-600 font-bold ml-2">🔴</span>
-                                @endif
-                            </div>
-                            <div class="text-content">
-                                @if ($isOwnMessage)
-                                    <strong>You:</strong> {{ Str::limit($lastMessage->message_text, 50) }}
-                                @else
-                                    {{ Str::limit($lastMessage->message_text, 50) }}
-                                @endif
-                            </div>
+            <a href="{{ route('messages.show', $receiver->id) }}">
+                <div class="inbox-item {{ $hasUnread ? 'unread-message' : '' }}">
+                    <img src="{{ $profilePhoto }}" class="profile-photo" alt="PFP">
+                    <div class="message-info">
+                        <div class="name-row">
+                            {{ $receiver->name }}
+                            @if ($isBanned)
+                                <span class="text-sm text-red-600">(Banned)</span>
+                            @endif
+                            @if ($hasUnread)
+                                <span class="text-sm text-red-600">🔴</span>
+                            @endif
+                        </div>
+                        <div class="preview-text">
+                            @if ($isOwnMessage)
+                                <strong>You:</strong> {{ Str::limit($lastMessage->message_text, 60) }}
+                            @else
+                                {{ Str::limit($lastMessage->message_text, 60) }}
+                            @endif
                         </div>
                     </div>
-
-                    <div class="inbox-message-timestamp">
-                        {{ $lastMessage->created_at->format('m/d/y H:i') }}
-                    </div>
+                        <div class="timestamp text-end">
+                            @if ($lastMessage->created_at->gt(\Carbon\Carbon::now()->subDay()))
+                                {{ $lastMessage->created_at->diffForHumans() }}
+                            @else
+                                {{ $lastMessage->created_at->format('F j') }}
+                            @endif
+                        </div>
                 </div>
             </a>
         @empty
-            <p>No messages found.</p>
+            <p class="text-center text-gray-500">No messages found.</p>
         @endforelse
     </div>
 </div>

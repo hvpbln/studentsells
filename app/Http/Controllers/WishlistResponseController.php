@@ -6,6 +6,7 @@ use App\Models\Wishlist;
 use App\Models\WishlistResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Notification;
 
 class WishlistResponseController extends Controller
 {
@@ -21,12 +22,21 @@ class WishlistResponseController extends Controller
             'offer_price' => 'nullable|numeric|min:0',
         ]);
 
-        $wishlist->responses()->create([
+        $response = $wishlist->responses()->create([
             'user_id' => Auth::id(),
             'message' => $validated['message'],
             'offer_price' => $validated['offer_price'] ?? null,
         ]);
 
-        return redirect()->route('wishlists.show', $wishlist->id)->with('success', 'Response sent successfully.');
+        if (Auth::id() !== $wishlist->user_id) {
+            Notification::create([
+                'user_id' => $wishlist->user_id,
+                'type' => 'wishlist_response',
+                'reference_id' => $response->id,
+                'message' => Auth::user()->name . ' replied to your wishlist: "' . $wishlist->title . '"',
+            ]);
+        }
+
+        return redirect()->route('wishlists.show', $wishlist->id)->with('success', 'Response sent!');
     }
 }
