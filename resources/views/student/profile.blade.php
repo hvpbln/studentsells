@@ -26,6 +26,7 @@
 
     .tab-content.active {
         display: block;
+        width: 600px;
     }
 
     .card-section {
@@ -69,6 +70,26 @@
         object-fit: cover;
         margin-right: 20px;
     }
+
+    .btn {
+        font-size: 0.75rem;
+        color: #6c6c6c;
+        border: 1px solid #bbbbbb;
+        padding: 4px 8px;
+        border-radius: 6px;
+        text-decoration: none;
+    }
+
+    .btn:hover {
+        background-color: #eff6ff;
+    }
+
+    .container2 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
 </style>
 
 <div class="container">
@@ -101,111 +122,115 @@
             @else
                 <p class="text-muted mt-1">No ratings yet.</p>
             @endif
+
+            @if(Auth::id() === $user->id)
+                <a href="{{ route('student.profile.edit') }}" class="btn btn-outline-primary btn-sm">Edit Profile</a>
+            @endif
         </div>
     </div>
 
-    {{-- Tab Buttons --}}
-    <div class="tab-buttons">
-        <button class="tab-btn active" onclick="switchTab('listings')">Listings</button>
-        <button class="tab-btn" onclick="switchTab('wishlists')">Wishlists</button>
-        @if(Auth::id() === $user->id)
-            <a href="{{ route('student.profile.edit') }}" class="btn btn-outline-primary btn-sm float-end">Edit Profile</a>
-        @endif
-    </div>
+    <div class="container2">
+            {{-- Tab Buttons --}}
+        <div class="tab-buttons">
+            <button class="tab-btn active" onclick="switchTab('listings')">My Listings</button>
+            <button class="tab-btn" onclick="switchTab('wishlists')">My Wishlists</button>
 
-    {{-- Listings Section --}}
-    <div id="listings" class="tab-content active">
-        <div class="section-title">My Listings</div>
-        @forelse($user->items as $item)
-            <div class="card-section">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h5>{{ $item->title }}</h5>
-                    @if(Auth::id() === $item->user_id)
-                        <div class="dropdown">
-                            <button class="btn btn-sm" type="button" data-bs-toggle="dropdown">&#8942;</button>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="{{ route('items.edit', $item->id) }}">Edit</a></li>
-                                <li>
-                                    <form action="{{ route('items.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Delete this listing?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="dropdown-item text-danger">Delete</button>
-                                    </form>
-                                </li>
-                            </ul>
+        </div>
+
+        {{-- Listings Section --}}
+        <div id="listings" class="tab-content active">
+            @forelse($user->items as $item)
+                <div class="card-section">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5>{{ $item->title }}</h5>
+                        @if(Auth::id() === $item->user_id)
+                            <div class="dropdown">
+                                <button class="btn btn-sm" type="button" data-bs-toggle="dropdown">&#8942;</button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="{{ route('items.edit', $item->id) }}">Edit</a></li>
+                                    <li>
+                                        <form action="{{ route('items.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Delete this listing?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="dropdown-item text-danger">Delete</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        @endif
+                    </div>
+
+                    <div class="text-muted mb-2">{{ ucfirst($item->status) }}</div>
+                    <p>{{ Str::limit($item->description, 150) }}</p>
+
+                    @if($item->images->count())
+                        <div class="item-images d-flex mb-2">
+                            @foreach($item->images as $image)
+                                <img src="{{ asset('storage/' . $image->image_url) }}" alt="Item Image" class="img-thumbnail">
+                            @endforeach
                         </div>
                     @endif
-                </div>
 
-                <div class="text-muted mb-2">{{ ucfirst($item->status) }}</div>
-                <p>{{ Str::limit($item->description, 150) }}</p>
-
-                @if($item->images->count())
-                    <div class="item-images d-flex mb-2">
-                        @foreach($item->images as $image)
-                            <img src="{{ asset('storage/' . $image->image_url) }}" alt="Item Image" class="img-thumbnail">
-                        @endforeach
+                    <div>
+                        <a href="{{ route('items.show', $item->id) }}" class="btn btn-outline-info btn-sm">View</a>
+                        <a href="{{ route('items.respond', $item->id) }}" class="btn btn-outline-info btn-sm">Respond</a>
+                        <a href="#" class="btn btn-contact btn-sm">Contact Poster</a>
                     </div>
-                @endif
-
-                <div>
-                    <a href="{{ route('items.show', $item->id) }}" class="btn btn-outline-info btn-sm">View</a>
-                    <a href="{{ route('items.respond', $item->id) }}" class="btn btn-outline-info btn-sm">Respond</a>
-                    <a href="#" class="btn btn-contact btn-sm">Contact Poster</a>
                 </div>
-            </div>
-        @empty
-            <p class="text-muted">You haven't posted any listings.</p>
-        @endforelse
-    </div>
+            @empty
+                <p class="text-muted">You haven't posted any listings.</p>
+            @endforelse
+        </div>
 
-    {{-- Wishlists Section --}}
-    <div id="wishlists" class="tab-content">
-        <div class="section-title">My Wishlists</div>
-        @forelse($user->wishlists as $wishlist)
-            <div class="card-section">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h5>{{ $wishlist->title }}</h5>
-                    @if(Auth::id() === $wishlist->user_id)
-                        <div class="dropdown">
-                            <button class="btn btn-sm" type="button" data-bs-toggle="dropdown">&#8942;</button>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="{{ route('wishlists.edit', $wishlist->id) }}">Edit</a></li>
-                                <li>
-                                    <form action="{{ route('wishlists.destroy', $wishlist->id) }}" method="POST" onsubmit="return confirm('Delete this wishlist?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="dropdown-item text-danger">Delete</button>
-                                    </form>
-                                </li>
-                            </ul>
+        {{-- Wishlists Section --}}
+        <div id="wishlists" class="tab-content">
+            @forelse($user->wishlists as $wishlist)
+                <div class="card-section">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5>{{ $wishlist->title }}</h5>
+                        @if(Auth::id() === $wishlist->user_id)
+                            <div class="dropdown">
+                                <button class="btn btn-sm" type="button" data-bs-toggle="dropdown">&#8942;</button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="{{ route('wishlists.edit', $wishlist->id) }}">Edit</a></li>
+                                    <li>
+                                        <form action="{{ route('wishlists.destroy', $wishlist->id) }}" method="POST" onsubmit="return confirm('Delete this wishlist?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="dropdown-item text-danger">Delete</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        @endif
+                    </div>
+
+                    <div class="text-muted mb-2">{{ ucfirst($wishlist->status) }}</div>
+                    <p>{{ Str::limit($wishlist->description, 150) }}</p>
+
+                    @if($wishlist->images->count())
+                        <div class="wishlist-images d-flex mb-2">
+                            @foreach($wishlist->images as $image)
+                                <img src="{{ asset('storage/' . $image->image_url) }}" alt="Wishlist Image" class="img-thumbnail">
+                            @endforeach
                         </div>
                     @endif
-                </div>
 
-                <div class="text-muted mb-2">{{ ucfirst($wishlist->status) }}</div>
-                <p>{{ Str::limit($wishlist->description, 150) }}</p>
-
-                @if($wishlist->images->count())
-                    <div class="wishlist-images d-flex mb-2">
-                        @foreach($wishlist->images as $image)
-                            <img src="{{ asset('storage/' . $image->image_url) }}" alt="Wishlist Image" class="img-thumbnail">
-                        @endforeach
+                    <div>
+                        <a href="{{ route('wishlists.show', $wishlist->id) }}" class="btn btn-outline-info btn-sm">View</a>
+                        <a href="{{ route('wishlists.responses.create', $wishlist->id) }}" class="btn btn-outline-info btn-sm">Respond</a>
+                        <a href="#" class="btn btn-contact btn-sm">Contact Seller</a>
                     </div>
-                @endif
-
-                <div>
-                    <a href="{{ route('wishlists.show', $wishlist->id) }}" class="btn btn-outline-info btn-sm">View</a>
-                    <a href="{{ route('wishlists.responses.create', $wishlist->id) }}" class="btn btn-outline-info btn-sm">Respond</a>
-                    <a href="#" class="btn btn-contact btn-sm">Contact Seller</a>
                 </div>
-            </div>
-        @empty
-            <p class="text-muted">You haven't added any wishlists.</p>
-        @endforelse
-    </div>
+            @empty
+                <p class="text-muted">You haven't added any wishlists.</p>
+            @endforelse
+        </div>
 
+    </div>
 </div>
+
+    
 
 {{-- JavaScript to Handle Tab Switching --}}
 <script>

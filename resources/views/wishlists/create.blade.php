@@ -13,10 +13,10 @@
     }
 
     .form-wrapper {
-        background-color: #ffffff;
+        background-color: none;
         border-radius: 16px;
         padding: 30px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        box-shadow: 4px 8px 16px 8px rgba(0,0,0,0.10);
     }
 
     .form-title {

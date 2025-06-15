@@ -116,6 +116,10 @@
             font-weight: bold;
             }
     </style>
+
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
+
 </head>
 <body>
     <header>
@@ -184,5 +188,6 @@ function updateCharCount() {
 }
 window.onload = updateCharCount;
 </script>
+<script src="{{ asset('js/user-profile.js') }}"></script>
 </body>
 </html>
