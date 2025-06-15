@@ -148,7 +148,11 @@
                 <div class="wishlist-buttons">
                     <a href="{{ route('wishlists.show', $wishlist->id) }}" class="btn btn-outline-info btn-sm">View</a>
                     <a href="{{ route('wishlists.responses.create', $wishlist->id) }}" class="btn btn-outline-info btn-sm">Respond</a>
-                    <a href="#" class="btn btn-contact btn-sm">Contact Seller</a>
+                    @auth
+                        @if(auth()->id() !== $wishlist->user_id)
+                            <a href="{{ route('messages.show', ['userId' => $wishlist->user_id, 'wishlist_id' => $wishlist->id]) }}" class="btn btn-contact btn-sm">Contact Seller</a>
+                        @endif
+                    @endauth
                 </div>
             </div>
         @endforeach

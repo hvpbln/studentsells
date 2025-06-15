@@ -20,7 +20,11 @@
                     </strong>
                 </p>
                 <div class="d-flex gap-2">
-                    <a href="{{ route('messages.show', ['userId' => $item->user_id, 'item_id' => $item->id]) }}" class="btn btn-sm btn-outline-secondary">Chat</a>
+                    @auth
+                        @if(auth()->id() !== $item->user_id)
+                            <a href="{{ route('messages.show', ['userId' => $item->user_id, 'item_id' => $item->id]) }}" class="btn btn-sm btn-outline-secondary">Chat</a>
+                        @endif
+                    @endauth
                 </div>
             </div>
         </div>

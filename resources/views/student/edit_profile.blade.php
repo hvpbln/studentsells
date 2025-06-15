@@ -106,10 +106,19 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
 
-                <div class="profile-img-preview">
+                <div class="profile-img-preview mt-2">
                     <img src="{{ asset('storage/' . ($user->profile_photo ?? 'profile_photos/placeholder_pfp.jpg')) }}"
                          alt="Profile Photo" width="100">
                 </div>
+
+                @if($user->profile_photo && $user->profile_photo !== 'profile_photos/placeholder_pfp.jpg')
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" type="checkbox" name="remove_profile_photo" id="remove_profile_photo" value="1">
+                        <label class="form-check-label" for="remove_profile_photo">
+                            Remove current profile photo
+                        </label>
+                    </div>
+                @endif
             </div>
 
             <!-- Buttons -->

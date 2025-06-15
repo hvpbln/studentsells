@@ -103,8 +103,11 @@
                         {{ $wishlist->user->name ?? 'Unknown' }}
                     </a></strong>
                 </p>
-                <a href="{{ route('messages.show', ['userId' => $wishlist->user_id, 'wishlist_id' => $wishlist->id]) }}"
-                   class="btn btn-sm btn-outline-secondary">Chat</a>
+                    @auth
+                        @if(auth()->id() !== $wishlist->user_id)
+                            <a href="{{ route('messages.show', ['userId' => $wishlist->user_id, 'wishlist_id' => $wishlist->id]) }}" class="btn btn-sm btn-outline-secondary">Chat</a>
+                        @endif
+                    @endauth
             </div>
         </div>
 

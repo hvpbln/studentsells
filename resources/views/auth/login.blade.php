@@ -10,7 +10,7 @@
         margin: 0;
         padding: 0;
         height: 100%;
-        overflow: hidden;
+        overflow: hidden; /* prevents scrollbar */
         font-family: 'Montserrat', sans-serif;
         background-color: #d9dbf0;
     }
@@ -19,6 +19,7 @@
         display: flex;
         height: calc(100vh - 60px);
         width: 100%;
+        overflow: hidden; /* ensures internal content doesn't scroll */
     }
 
     .left-section, .right-section {
@@ -28,6 +29,7 @@
         align-items: center;
         padding: 2rem;
         margin-top: -150px;
+        overflow: hidden;
     }
 
     .login-form-container {
@@ -204,6 +206,10 @@
     }
 
     @media (max-width: 768px) {
+        html, body {
+            overflow: auto;
+        }
+
         .login-page {
             flex-direction: column;
             height: auto;

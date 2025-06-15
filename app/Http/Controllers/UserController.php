@@ -50,6 +50,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'password' => 'nullable|string|min:6|confirmed',
             'profile_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'remove_profile_photo' => 'nullable|boolean',
         ]);
 
         $user->name = $validated['name'];
@@ -58,9 +59,14 @@ class UserController extends Controller
             $user->password = Hash::make($validated['password']);
         }
 
+        if ($request->has('remove_profile_photo') && $user->profile_photo && $user->profile_photo !== 'profile_photos/placeholder_pfp.jpg') {
+            Storage::disk('public')->delete($user->profile_photo);
+            $user->profile_photo = null;
+        }
+
         if ($request->hasFile('profile_photo')) {
-            if ($user->profile_photo) {
-                Storage::delete('public/' . $user->profile_photo);
+            if ($user->profile_photo && $user->profile_photo !== 'profile_photos/placeholder_pfp.jpg') {
+                Storage::disk('public')->delete($user->profile_photo);
             }
 
             $user->profile_photo = $request->file('profile_photo')->store('profile_photos', 'public');

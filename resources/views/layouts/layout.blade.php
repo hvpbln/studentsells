@@ -162,7 +162,15 @@
         <div class="right-section">
             <div class="icon">
                 <a href="{{ route('student.profile') }}">
-                    <img src="{{ asset('pictures/profile.png') }}" alt="Profile" style="width: 100%; height: 100%; object-fit: cover;">
+                    @php
+                        $user = auth()->user();
+                        $profilePhoto = $user && $user->profile_photo && \Illuminate\Support\Facades\Storage::disk('public')->exists($user->profile_photo)
+                            ? asset('storage/' . $user->profile_photo)
+                            : asset('storage/profile_photos/placeholder_pfp.jpg');
+                    @endphp
+
+                    <img src="{{ $profilePhoto }}" alt="Profile"
+                        style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                 </a>
             </div>
         </div>
