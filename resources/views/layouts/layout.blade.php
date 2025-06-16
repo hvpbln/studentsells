@@ -233,6 +233,19 @@ function updateCharCount() {
 }
 window.onload = updateCharCount;
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const previewImages = document.querySelectorAll('.preview-image');
+    const modalImage = document.getElementById('modalImage');
+
+    previewImages.forEach(img => {
+        img.addEventListener('click', function () {
+            const src = this.getAttribute('data-image');
+            modalImage.src = src;
+        });
+    });
+});
+</script>
 <script src="{{ asset('js/user-profile.js') }}"></script>
 </body>
 </html>

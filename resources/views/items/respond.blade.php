@@ -1,20 +1,87 @@
 @extends('layouts.layout')
 
 @section('content')
-<h1>Respond to Listing: {{ $item->title }}</h1>
+<style>
+    body {
+        background-color: #d9dbf0;
+    }
 
-<form method="POST" action="{{ route('items.sendresponse', $item->id) }}">
-    @csrf
+    .container-custom {
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 30px 20px;
+    }
 
-    <div class="mb-3">
-        <label for="message" class="form-label">Message <span class="text-danger">*</span></label>
-        <textarea id="message" name="message" class="form-control @error('message') is-invalid @enderror" rows="4" required>{{ old('message') }}</textarea>
-        @error('message')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
+    .form-wrapper {
+        background-color: #ffffff;
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+
+    .form-title {
+        font-size: 1.75rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        color: #2f2f2f;
+    }
+
+    .form-label {
+        font-weight: 500;
+    }
+
+    .btn-submit {
+        background-color: #e6f49c;
+        font-weight: 600;
+        border-radius: 10px;
+        border: none;
+        color: #333;
+        padding: 8px 16px;
+    }
+
+    .btn-cancel {
+        border-radius: 10px;
+        border: 1px solid #bbb;
+        padding: 8px 16px;
+        font-weight: 500;
+        color: #444;
+        margin-left: 10px;
+    }
+</style>
+
+<div class="container-custom">
+    <div class="form-wrapper">
+        <h2 class="form-title">
+            <i class="bi bi-reply-fill me-2"></i>Respond to Listing:
+            <span class="text-primary">{{ $item->title }}</span>
+        </h2>
+
+        <form method="POST" action="{{ route('items.sendresponse', $item->id) }}">
+            @csrf
+
+            <!-- Message -->
+            <div class="mb-3">
+                <label for="message" class="form-label">
+                    <i class="bi bi-chat-left-dots me-1"></i> Message <span class="text-danger">*</span>
+                </label>
+                <textarea id="message" name="message" rows="4"
+                          class="form-control @error('message') is-invalid @enderror"
+                          placeholder="Write your response..." required>{{ old('message') }}</textarea>
+                @error('message')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            
+            <!-- Buttons -->
+            <div class="d-flex">
+                <button type="submit" class="btn btn-submit">
+                    <i class="bi bi-send-fill me-1"></i>Send Response
+                </button>
+                <a href="{{ route('items.show', $item->id) }}" class="btn btn-cancel">
+                    <i class="bi bi-x-circle me-1"></i>Cancel
+                </a>
+            </div>
+        </form>
     </div>
-
-    <button type="submit" class="btn btn-primary">Send Response</button>
-    <a href="{{ route('items.show', $item->id) }}" class="btn btn-secondary ms-2">Cancel</a>
-</form>
+</div>
 @endsection
