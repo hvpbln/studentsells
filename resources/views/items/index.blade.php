@@ -44,6 +44,16 @@
         border-radius: 10px;
     }
 
+    .btn-primary {
+        background-color: #e5f4c6;
+        color: #6c757d;
+        border-radius: 10px;
+    }
+
+    .btn-primary:hover {
+        background-color:rgb(150, 179, 92);
+    }
+
     .listing-badge {
         background-color: #f0f0f0;
         color: #333;
@@ -194,8 +204,14 @@
             @if($item->images->count())
                 <div class="listing-images mb-2 d-flex flex-wrap gap-2" style="max-width: 100%;">
                     @foreach($item->images as $image)
-                        <img src="{{ asset('storage/' . $image->image_url) }}" alt="Item Image"
-                            class="img-fluid">
+                        <img src="{{ asset('storage/' . $image->image_url) }}"
+                        alt="Item Image"
+                        class="img-fluid preview-image"
+                        data-bs-toggle="modal"
+                        data-bs-target="#imagePreviewModal"
+                        data-image="{{ asset('storage/' . $image->image_url) }}"
+                        style="width: 300px; height: auto; object-fit: cover; 
+                        border-radius:10px; cursor: zoom-in;">
                     @endforeach
                 </div>
             @endif
@@ -228,3 +244,14 @@
     <div class="alert alert-info">No items have been listed yet.</div>
 @endif
 @endsection
+
+<!-- Image Preview Modal -->
+<div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-labelledby="imagePreviewLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content bg-transparent border-0">
+      <div class="modal-body text-center p-0">
+        <img id="modalImage" src="" class="img-fluid rounded shadow" style="max-height: 80vh;">
+      </div>
+    </div>
+  </div>
+</div>
