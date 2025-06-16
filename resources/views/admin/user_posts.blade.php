@@ -3,13 +3,82 @@
 @section('title', 'Posts of ' . $user->name)
 
 @section('content')
+<style>
+    body {
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    h1, h2 {
+        margin-top: 30px;
+        font-weight: 600;
+        color: #222;
+    }
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        background-color: white;
+        border-radius: 6px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .table thead {
+        background-color: #f2f2f2;
+    }
+    .table th, .table td {
+        padding: 12px 16px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+        vertical-align: top;
+    }
+    .table img {
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+    .d-flex {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    p {
+        margin-top: 10px;
+        color: #666;
+    }
+    a {
+        display: inline-block;
+        margin-top: 20px;
+        text-decoration: none;
+        color: #0066cc;
+        font-weight: 500;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+
+    .dashboard-btn {
+        display: inline-block;
+        background-color: #8E9DCC;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;S
+        transition: background-color 0.3s ease;
+    }
+
+    .dashboard-btn:hover {
+        background-color: #7d84b2;
+    }
+
+</style>
+
 <h1>Posts of {{ $user->name }}</h1>
 
 <h2>Listings</h2>
 @if($listings->isEmpty())
     <p>No listings found.</p>
 @else
-    <table class="table table-bordered">
+    <table class="table">
         <thead>
             <tr>
                 <th>Title</th>
@@ -32,9 +101,9 @@
                 <td>{{ $listing->created_at->format('M d, Y') }}</td>
                 <td>
                     @if($listing->images->count())
-                        <div class="d-flex flex-wrap" style="gap: 5px;">
+                        <div class="d-flex">
                             @foreach($listing->images as $image)
-                                <img src="{{ asset('storage/' . $image->image_url) }}" alt="Image" width="60" class="img-thumbnail">
+                                <img src="{{ asset('storage/' . $image->image_url) }}" alt="Image" width="60">
                             @endforeach
                         </div>
                     @else
@@ -51,7 +120,7 @@
 @if($listingResponses->isEmpty())
     <p>No listing responses found.</p>
 @else
-    <table class="table table-bordered">
+    <table class="table">
         <thead>
             <tr>
                 <th>Listing Title</th>
@@ -77,7 +146,7 @@
 @if($wishlists->isEmpty())
     <p>No wishlists found.</p>
 @else
-    <table class="table table-bordered">
+    <table class="table">
         <thead>
             <tr>
                 <th>Title</th>
@@ -104,9 +173,9 @@
                 <td>{{ $wishlist->created_at->format('M d, Y') }}</td>
                 <td>
                     @if($wishlist->images->count())
-                        <div class="d-flex flex-wrap" style="gap: 5px;">
+                        <div class="d-flex">
                             @foreach($wishlist->images as $image)
-                                <img src="{{ asset('storage/' . $image->image_url) }}" alt="Image" width="60" class="img-thumbnail">
+                                <img src="{{ asset('storage/' . $image->image_url) }}" alt="Image" width="60">
                             @endforeach
                         </div>
                     @else
@@ -123,7 +192,7 @@
 @if($wishlistResponses->isEmpty())
     <p>No wishlist responses found.</p>
 @else
-    <table class="table table-bordered">
+    <table class="table">
         <thead>
             <tr>
                 <th>Wishlist Title</th>
@@ -145,5 +214,6 @@
     </table>
 @endif
 
-<p><a href="{{ route('admin.manageUsers') }}">Back to Users</a></p>
+<a href="{{ route('admin.manageUsers') }}" class="dashboard-btn">← Back to Users</a>
+<BR></BR>
 @endsection

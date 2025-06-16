@@ -71,17 +71,19 @@
     }
 
     .action-btn {
-        background-color: #ff4d4f;
-        border: none;
-        padding: 6px 12px;
-        color: #fff;
+        background-color: transparent;
+        color: red;
+        border: 1px solid red;
+        padding: 6px 10px;
         border-radius: 4px;
         font-size: 0.85rem;
         cursor: pointer;
+        transition: background-color 0.2s ease;
     }
 
     .action-btn:hover {
-        background-color: #d9363e;
+        background-color: red;
+        color: white;
     }
 
     .empty-state {

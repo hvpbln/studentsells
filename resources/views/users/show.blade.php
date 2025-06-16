@@ -2,6 +2,12 @@
 
 @section('content')
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Shrikhand&family=Great+Vibes&display=swap');
+    
+    body {
+        font-family: 'Montserrat', sans-serif;
+    }
+
     .tab-buttons {
         margin-bottom: 20px;
     }
@@ -100,14 +106,12 @@
 
 <div class="container">
 
-    {{-- Profile Header --}}
     <div class="profile-header">
         <img src="{{ $user->profile_photo ? asset('storage/' . $user->profile_photo) : asset('storage/profile_photos/placeholder_pfp.jpg') }}" alt="Profile Photo">
         <div>
             <h2>{{ $user->name }}</h2>
             <p class="text-muted">{{ $user->email }}</p>
 
-            {{-- Display Average Rating --}}
             @if($user->ratingsReceived()->count())
                 <div class="text-warning mt-1">
                     @for ($i = 1; $i <= 5; $i++)
@@ -125,7 +129,6 @@
                 <p class="text-muted">No ratings yet.</p>
             @endif
 
-            {{-- Interactive Star Rating with Submit Button --}}
             <div class="give-ratings">
                 @if(Auth::check() && Auth::id() !== $user->id)
                     <br>
@@ -137,21 +140,16 @@
                         <button id="submit-rating" class="btn btn-outline-info btn-sm" style="display:none;">Submit Rating</button>
                         <div id="rating-message" class="mt-2 text-success" style="display:none;"></div>
                     </div>
-                    
                 @endif
-            </div>
-            
+            </div> 
         </div>
     </div>
 
     <div class="container2">
-            {{-- Tab Buttons --}}
         <div class="tab-buttons">
             <button class="tab-btn active" onclick="switchTab('listings')">Listings</button>
             <button class="tab-btn" onclick="switchTab('wishlists')">Wishlists</button>
         </div>
-
-        {{-- Listings --}}
         <div id="listings" class="tab-content active">
             @forelse($user->items as $item)
                 <div class="card-section">
@@ -172,11 +170,9 @@
                     </div>
                 </div>
             @empty
-                <p class="text-muted">No listings found.</p>
+                <p class="text-muted" style="text-align: center;" >No listings found.</p>
             @endforelse
         </div>
-
-        {{-- Wishlists --}}
         <div id="wishlists" class="tab-content">
             @forelse($user->wishlists as $wishlist)
                 <div class="card-section">
@@ -197,7 +193,7 @@
                     </div>
                 </div>
             @empty
-                <p class="text-muted">No wishlists found.</p>
+                <p class="text-muted" style="text-align: center;" >No wishlists found.</p>
             @endforelse
         </div>
     </div>

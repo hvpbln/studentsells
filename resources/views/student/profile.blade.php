@@ -23,12 +23,12 @@
     }
 
     .tab-buttons button:hover {
-        background-color: #cdd7a7;
+        background-color: #95c235;
         cursor: pointer;
     }
 
     .tab-buttons button.active {
-        background-color: #cdd7a7;
+        background-color: #dbf4a7;
     }
 
     .tab-content {
@@ -98,7 +98,7 @@
     }
 
     .btn:hover {
-        background-color: #eff6ff;
+        background-color: #cae1ff;
     }
 
     .container2 {
@@ -224,9 +224,9 @@
                         @endauth
                     </div>
                 </div>
-            @empty
-                <p class="text-muted">You haven't posted any listings.</p>
-            @endforelse
+                    @empty
+                        <p class="text-muted" style="text-align: center;" >You haven't posted any listings.</p>
+                    @endforelse
         </div>
 
         {{-- Wishlists Section --}}
@@ -278,7 +278,7 @@
                     </div>
                 </div>
             @empty
-                <p class="text-muted">You haven't added any wishlists.</p>
+                <p class="text-muted"style="text-align: center;" >You haven't added any wishlists.</p>
             @endforelse
         </div>
     </div>

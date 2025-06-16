@@ -86,9 +86,17 @@
     .delete {
         background-color: transparent;
         color: red;
-        font-weight: bold;
-        padding: 4px 6px;
+        border: 1px solid red;
+        padding: 6px 10px;
+        border-radius: 4px;
         font-size: 0.85rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    .delete:hover {
+        background-color: red;
+        color: white;
     }
 
     .view-posts {

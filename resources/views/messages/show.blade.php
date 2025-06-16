@@ -44,6 +44,8 @@
     .user-header-name {
         font-size: 1rem;
         font-weight: 600;
+        padding-top: 10px;
+        padding-bottom: 5px;
     }
 
     .view-profile-button {
@@ -53,6 +55,7 @@
         padding: 4px 8px;
         border-radius: 6px;
         text-decoration: none;
+        width: 90px;
     }
 
     .view-profile-button:hover {
@@ -154,6 +157,11 @@
         color: #fff;
         transform: scale(1.03);
         box-shadow: 0 3px 12px rgba(149, 194, 53, 0.3);
+    }
+
+    .user-header-info {
+        display: flex;
+        flex-direction: column;
     }
 
 </style>
