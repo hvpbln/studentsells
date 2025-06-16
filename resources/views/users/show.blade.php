@@ -168,7 +168,7 @@
                     <div>
                         <a href="{{ route('items.show', $item->id) }}" class="btn btn-outline-info btn-sm">View</a>
                         <a href="{{ route('items.respond', $item->id) }}" class="btn btn-outline-info btn-sm">Respond</a>
-                        <a href="#" class="btn btn-contact btn-sm">Contact Poster</a>
+                        <a href="{{ route('messages.show', ['userId' => $user->id, 'item_id' => $item->id]) }}" class="btn btn-contact btn-sm">Contact Seller</a>
                     </div>
                 </div>
             @empty
@@ -193,7 +193,7 @@
                     <div>
                         <a href="{{ route('wishlists.show', $wishlist->id) }}" class="btn btn-outline-info btn-sm">View</a>
                         <a href="{{ route('wishlists.responses.create', $wishlist->id) }}" class="btn btn-outline-info btn-sm">Respond</a>
-                        <a href="#" class="btn btn-contact btn-sm">Contact Seller</a>
+                        <a href="{{ route('messages.show', ['userId' => $user->id, 'wishlist_id' => $wishlist->id]) }}" class="btn btn-contact btn-sm">Contact Poster</a>
                     </div>
                 </div>
             @empty

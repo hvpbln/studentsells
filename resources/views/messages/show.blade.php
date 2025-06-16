@@ -179,6 +179,19 @@
     <hr style="border-top: 1px solid #000000; margin: 0.5rem 0;">
 
     <div id="chat-history">
+
+    @if ($showPreview && $item)
+        <div style="background-color: #fffce0; border-left: 4px solid #facc15; padding: 0.75rem 1rem; margin-bottom: 1rem; border-radius: 8px; font-size: 0.875rem;">
+            🛈 You started a conversation about the item: <strong>"{{ $item->title }}"</strong>
+        </div>
+    @endif
+
+    @if ($showPreview && $wishlist)
+        <div style="background-color: #fffce0; border-left: 4px solid #facc15; padding: 0.75rem 1rem; margin-bottom: 1rem; border-radius: 8px; font-size: 0.875rem;">
+            🛈 You started a conversation about the wishlist: <strong>"{{ $wishlist->title }}"</strong>
+        </div>
+    @endif
+
         @foreach ($messages as $message)
             @php $isSender = $message->sender_id === auth()->id(); @endphp
             <div class="flex {{ $isSender ? 'justify-end' : 'justify-start' }}">
