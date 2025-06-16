@@ -119,6 +119,11 @@
         color: #2b463c;
     }
 
+    .bg-warning {
+        background-color: #fff3cd !important;
+        color: #856404;
+    }
+
     .bg-secondary {
         background-color: #d6d6f5 !important;
         color: #3b3f58;
@@ -209,9 +214,11 @@
                 {{-- Title and status --}}
                 <div class="d-flex align-items-center gap-2 mb-2">
                     <h5 class="fw-bold mb-0">{{ $wishlist->title }}</h5>
-                    <span class="badge badge-status bg-{{ $wishlist->status == 'open' ? 'success' : 'secondary' }}">
-                        {{ ucfirst($wishlist->status) }}
-                    </span>
+                        <span class="badge badge-status
+                            {{ $wishlist->status === 'open' ? 'bg-success' :
+                            ($wishlist->status === 'fulfilled' ? 'bg-warning' : 'bg-secondary') }}">
+                            {{ ucfirst($wishlist->status) }}
+                        </span>
                 </div>
 
                 {{-- Description --}}

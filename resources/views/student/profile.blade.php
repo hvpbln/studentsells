@@ -90,15 +90,20 @@
 
     .btn {
         font-size: 0.75rem;
-        color: #6c6c6c;
-        border: 1px solid #bbbbbb;
-        padding: 4px 8px;
-        border-radius: 6px;
+        padding: 8px 20px;
+        border: none;
+        background-color: #e6e6f0;
+        border-radius: 10px;
+        font-weight: bold;
+        color: #333;
         text-decoration: none;
+        transition: background-color 0.3s ease;
     }
 
     .btn:hover {
-        background-color: #cae1ff;
+        background-color: #95c235;
+        color: white;
+        cursor: pointer;
     }
 
     .container2 {

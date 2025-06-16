@@ -2,175 +2,188 @@
 
 @section('content')
 <style>
-    body {
-        background-color: #d9dbf0;
+    .card {
+        background-color: #f9f9f2;
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+        padding: 1rem;
+        margin-bottom: 1rem;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
-    .container-custom {
-        max-width: 700px;
-        margin: 0 auto;
-        padding: 30px 20px;
+    .wishlist-images {
+        justify-content: center;
     }
 
-    .section-title {
-        font-size: 2rem;
-        font-weight: bold;
-        margin-bottom: 1.5rem;
-        color: #2f2f2f;
-    }
-
-    .wishlist-container,
     .response-card {
         background-color: #ffffff;
-        padding: 20px;
-        border-radius: 16px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-        margin-bottom: 20px;
-    }
-
-    .profile-photo {
-        width: 64px;
-        height: 64px;
-        object-fit: cover;
-        border-radius: 50%;
-        border: 2px solid #ccc;
-    }
-
-    .user-info {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        margin-bottom: 20px;
-    }
-
-    .wishlist-image {
-        width: 160px;
-        height: 120px;
-        object-fit: cover;
+        border: 1px solid #e0e0e0;
         border-radius: 12px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+        padding: 1rem;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    }
+
+    .highlighted {
+        background-color: #fcf7c2 !important;
+        transition: background-color 0.1s ease;
     }
 
     .btn-respond {
-        background-color: #e6f49c;
-        font-weight: 600;
+        background-color: #e5f4c6;
+        color: #6c757d;
         border-radius: 10px;
+    }
+
+    .btn-respond:hover {
+        background-color: rgb(150, 179, 92);
+    }
+
+    .btn-secondary {
+        border-radius: 10px;
+    }
+
+    .btn-chat {
+        background-color: #d4edb0;
+        color: #2f3e2f;
         border: none;
-        color: #333;
-        padding: 8px 16px;
-    }
-
-    .btn-back {
         border-radius: 10px;
-        border: 1px solid #bbb;
-        padding: 8px 16px;
-        font-weight: 500;
-        color: #444;
+        transition: background-color 0.2s ease;
     }
 
-    .action-buttons {
-        display: flex;
-        gap: 10px;
-        margin-top: 20px;
+    .btn-chat:hover {
+        background-color: #a5c67a;
+        color: #1c2a1c;
     }
 
     .badge-status {
-        font-size: 0.9rem;
-        padding: 6px 12px;
-        border-radius: 12px;
+        padding: 0.4em 0.75em;
+        font-size: 0.75rem;
+        border-radius: 999px;
+        font-weight: 600;
     }
 
-    a {
-        text-decoration: none;
-        color: black;
+    .bg-success {
+        background-color: #b7e4c7 !important;
+        color: #2b463c;
+    }
+
+    .bg-warning {
+        background-color: #fff3cd !important;
+        color: #856404;
+    }
+
+    .bg-secondary {
+        background-color: #d6d6f5 !important;
+        color: #3b3f58;
     }
 </style>
 
-<div class="container-custom">
-    <h2 class="section-title">Wishlist</h2>
+{{-- Main Wishlist Card --}}
+<div class="card mb-4 shadow-sm card-display">
+    <div class="card-body">
+        {{-- Title and Status --}}
+        <div class="d-flex align-items-center gap-2 mb-2">
+            <h4 class="fw-bold mb-0">
+                <i class="bi bi-star-fill text-warning me-2"></i>{{ $wishlist->title }}
+            </h4>
+            <span class="badge badge-status
+                {{ $wishlist->status === 'open' ? 'bg-success' :
+                   ($wishlist->status === 'fulfilled' ? 'bg-warning' : 'bg-secondary') }}">
+                {{ ucfirst($wishlist->status) }}
+            </span>
+        </div>
 
-    <div class="wishlist-container">
-        <h3 class="mb-3"><i class="bi bi-star-fill text-warning me-2"></i>{{ $wishlist->title }}</h3>
-
-        <div class="user-info">
+        {{-- Poster Info --}}
+        <div class="d-flex align-items-center mb-3">
             <img src="{{ $wishlist->user->profile_photo ? asset('storage/' . $wishlist->user->profile_photo) : asset('storage/profile_photos/placeholder_pfp.jpg') }}"
-                 alt="Profile"
-                 class="profile-photo">
+                 alt="Profile Photo"
+                 class="rounded-circle me-3"
+                 style="width: 64px; height: 64px; object-fit: cover;">
 
             <div>
-                <p class="mb-1"><strong>
-                    <a href="{{ route('users.show', $wishlist->user_id) }}">
-                        {{ $wishlist->user->name ?? 'Unknown' }}
-                    </a></strong>
+                <p class="mb-1">
+                    <strong>
+                        @php
+                            $isOwner = auth()->check() && auth()->id() === $wishlist->user_id;
+                        @endphp
+                        <a href="{{ $isOwner ? route('student.profile') : route('users.show', $wishlist->user_id) }}" class="text-decoration-none text-dark fw-semibold">
+                            {{ $wishlist->user->name ?? 'Unknown' }}
+                        </a>
+                    </strong>
                 </p>
-                    @auth
-                        @if(auth()->id() !== $wishlist->user_id)
-                            <a href="{{ route('messages.show', ['userId' => $wishlist->user_id, 'wishlist_id' => $wishlist->id]) }}" class="btn btn-sm btn-outline-secondary">Chat</a>
-                        @endif
-                    @endauth
+                @auth
+                    @if(auth()->id() !== $wishlist->user_id)
+                        <a href="{{ route('messages.show', ['userId' => $wishlist->user_id, 'wishlist_id' => $wishlist->id]) }}" class="btn btn-sm btn-chat">Chat</a>
+                    @endif
+                @endauth
             </div>
         </div>
 
-        <p class="mb-1"><strong>Price Range:</strong>
+        <p><strong>Price Range:</strong>
             @if($wishlist->price_range_min) ₱{{ number_format($wishlist->price_range_min, 2) }} @endif -
             @if($wishlist->price_range_max) ₱{{ number_format($wishlist->price_range_max, 2) }} @endif
         </p>
 
-        <p class="mb-3"><strong>Status:</strong>
-            <span class="badge badge-status bg-{{ $wishlist->status == 'open' ? 'success' : 'secondary' }}">
-                {{ ucfirst($wishlist->status) }}
-            </span>
-        </p>
+        @if($wishlist->description)
+            <p class="text-muted">{{ $wishlist->description }}</p>
+        @endif
 
         @if($wishlist->images->count())
             <div class="wishlist-images mb-2 d-flex flex-wrap gap-2">
                 @foreach($wishlist->images as $image)
                     <img src="{{ asset('storage/' . $image->image_url) }}"
-                        alt="Image"
-                        class="wishlist-image"
-                        style="cursor: pointer;"
+                        alt="Wishlist Image"
+                        class="img-fluid preview-image"
                         data-bs-toggle="modal"
                         data-bs-target="#wishlistImagePreviewModal"
-                        data-image="{{ asset('storage/' . $image->image_url) }}">
+                        data-image="{{ asset('storage/' . $image->image_url) }}"
+                        style="width: 300px; height: auto; object-fit: cover; border-radius: 10px; cursor: pointer;">
                 @endforeach
             </div>
         @endif
-    </div>
 
-    <div class="mb-4">
-        <h4 class="mb-3"><i class="bi bi-chat-left-dots me-2"></i>Responses</h4>
+        <a href="{{ route('wishlists.responses.create', $wishlist->id) }}" class="btn btn-respond mt-3">Respond to Wishlist</a>
+        <a href="{{ route('wishlists.index') }}" class="btn btn-secondary mt-3">Back to List</a>
+    </div>
+</div>
+
+{{-- Responses Section --}}
+<div class="card">
+    <div class="card-body">
+        <h3 class="fw-semibold mb-3">Responses</h3>
 
         @if($wishlist->responses->count())
             @foreach($wishlist->responses as $response)
-                <div id="response-{{ $response->id }}" class="response-card">
-                    <p class="mb-1">
-                        <strong><i class="bi bi-person-circle me-1"></i>{{ $response->user->name ?? 'User' }}:</strong>
-                        {{ $response->message }}
-                    </p>
+                <div id="response-{{ $response->id }}" class="response-card mb-3">
+                    <div class="d-flex align-items-center mb-2">
+                        @php
+                            $isResponder = auth()->check() && auth()->id() === $response->user_id;
+                        @endphp
+                        <a href="{{ $isResponder ? route('student.profile') : route('users.show', $response->user_id) }}">
+                            <img src="{{ $response->user->profile_photo ? asset('storage/' . $response->user->profile_photo) : asset('storage/profile_photos/placeholder_pfp.jpg') }}"
+                                class="rounded-circle me-3"
+                                style="width: 48px; height: 48px; object-fit: cover;"
+                                alt="Profile Photo">
+                        </a>
+                        <strong>
+                            <a href="{{ $isResponder ? route('student.profile') : route('users.show', $response->user_id) }}" class="text-decoration-none text-dark fw-semibold">
+                                {{ $response->user->name ?? 'User' }}
+                            </a>
+                        </strong>
+                    </div>
+                    <p class="mb-1">{{ $response->message }}</p>
                     @if($response->offer_price)
-                        <p class="mb-1 text-success">
-                            <i class="bi bi-currency-dollar me-1"></i>
-                            <strong>Offer:</strong> ₱{{ number_format($response->offer_price, 2) }}
-                        </p>
+                        <p class="mb-1 text-success"><strong>Offer Price:</strong> ₱{{ number_format($response->offer_price, 2) }}</p>
                     @endif
-                    <small class="text-muted"><i class="bi bi-clock me-1"></i>
-                        {{ $response->created_at->format('M d, Y H:i') }}</small>
+                    <small class="text-muted">Sent at {{ $response->created_at->format('M d, Y H:i') }}</small>
                 </div>
             @endforeach
         @else
-            <div class="alert alert-info">
-                <i class="bi bi-info-circle me-1"></i> No responses yet.
-            </div>
+            <p class="text-muted">No responses yet.</p>
         @endif
-    </div>
-
-    <div class="action-buttons">
-        <a href="{{ route('wishlists.responses.create', $wishlist->id) }}" class="btn btn-respond">
-            <i class="bi bi-reply-fill me-1"></i> Respond
-        </a>
-        <a href="{{ route('wishlists.index') }}" class="btn btn-back">
-            <i class="bi bi-arrow-left me-1"></i> Back
-        </a>
     </div>
 </div>
 
@@ -180,16 +193,16 @@
         if (hash && hash.startsWith('#response-')) {
             const el = document.querySelector(hash);
             if (el) {
-                el.style.transition = 'background-color 0.1s ease';
-                el.style.backgroundColor = '#fcf7c2';
+                el.classList.add('highlighted');
                 setTimeout(() => {
-                    el.style.backgroundColor = '';
+                    el.classList.remove('highlighted');
                 }, 1500);
             }
         }
     });
 </script>
 
+<!-- Image Preview Modal -->
 <div class="modal fade" id="wishlistImagePreviewModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content bg-transparent border-0">

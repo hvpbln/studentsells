@@ -195,7 +195,7 @@
 
     @if ($showPreview && $item)
         <div style="background-color: #fffce0; border-left: 4px solid #facc15; padding: 0.75rem 1rem; margin-bottom: 1rem; border-radius: 8px; font-size: 0.875rem;">
-            🛈 You started a conversation about the item: <strong>"{{ $item->title }}"</strong>
+            🛈 You started a conversation about the listing: <strong>"{{ $item->title }}"</strong>
         </div>
     @endif
 
