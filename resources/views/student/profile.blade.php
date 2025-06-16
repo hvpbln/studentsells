@@ -2,6 +2,12 @@
 
 @section('content')
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Shrikhand&family=Great+Vibes&display=swap');
+    
+    body {
+        font-family: 'Montserrat', sans-serif;
+    }
+    
     .tab-buttons {
         margin-bottom: 20px;
     }
@@ -174,7 +180,11 @@
                     <div>
                         <a href="{{ route('items.show', $item->id) }}" class="btn btn-outline-info btn-sm">View</a>
                         <a href="{{ route('items.respond', $item->id) }}" class="btn btn-outline-info btn-sm">Respond</a>
-                        <a href="#" class="btn btn-contact btn-sm">Contact Poster</a>
+                            @auth
+                                @if(auth()->id() !== $item->user_id)
+                                    <a href="{{ route('messages.show', $item->user_id) }}?item_id={{ $item->id }}" class="btn btn-contact btn-sm">Contact Seller</a>
+                                @endif
+                            @endauth
                     </div>
                 </div>
             @empty
@@ -219,7 +229,11 @@
                     <div>
                         <a href="{{ route('wishlists.show', $wishlist->id) }}" class="btn btn-outline-info btn-sm">View</a>
                         <a href="{{ route('wishlists.responses.create', $wishlist->id) }}" class="btn btn-outline-info btn-sm">Respond</a>
-                        <a href="#" class="btn btn-contact btn-sm">Contact Seller</a>
+                            @auth
+                                @if(auth()->id() !== $wishlist->user_id)
+                                    <a href="{{ route('messages.show', $wishlist->user_id) }}?wishlist_id={{ $wishlist->id }}" class="btn btn-contact btn-sm">Contact Poster</a>
+                                @endif
+                            @endauth
                     </div>
                 </div>
             @empty

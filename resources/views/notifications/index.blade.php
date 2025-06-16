@@ -2,6 +2,12 @@
 
 @section('content')
 <style>
+     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Shrikhand&family=Great+Vibes&display=swap');
+    
+    body {
+        font-family: 'Montserrat', sans-serif;
+    }
+    
     .notifications-container {
         max-width: 800px;
         margin: 4rem auto;

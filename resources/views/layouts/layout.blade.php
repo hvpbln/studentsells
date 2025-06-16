@@ -9,9 +9,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Shrikhand&family=Great+Vibes&display=swap" rel="stylesheet">
 
     <style>
+
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Shrikhand&family=Great+Vibes&display=swap');
+    
         body {
         margin: 0;
-        font-family: sans-serif;
+               font-family: 'Montserrat', sans-serif;
         background-color: #d9dbf0;
         }
 
@@ -131,9 +134,20 @@
         </div>
 
         <nav>
-            <a href="{{ route('student.dashboard') }}">Home</a>
-            <a href="{{ route('items.index') }}">Shop</a>
-            <a href="{{ route('wishlists.index') }}">Wishlist</a>
+            <a href="{{ route('student.dashboard') }}" 
+            class="{{ Request::is('student/dashboard') ? 'active' : '' }}">
+                Home
+            </a>
+
+            <a href="{{ route('items.index') }}" 
+            class="{{ Request::is('items*') ? 'active' : '' }}">
+                Shop
+            </a>
+
+            <a href="{{ route('wishlists.index') }}" 
+            class="{{ Request::is('wishlists*') ? 'active' : '' }}">
+                Wishlist
+            </a>
 
             @php
                 use App\Models\Message;
@@ -142,7 +156,8 @@
                 $unreadNotifCount = auth()->check() ? Notification::where('user_id', auth()->id())->where('is_read', false)->count() : 0;
             @endphp
 
-            <a href="{{ route('messages.index') }}" class="{{ $unreadMsgCount > 0 ? 'bold-notification' : '' }}">
+            <a href="{{ route('messages.index') }}" 
+            class="{{ Request::is('messages*') ? 'active' : '' }} {{ $unreadMsgCount > 0 ? 'bold-notification' : '' }}">
                 Messages 
                 @if ($unreadMsgCount > 0)
                     <span style="color: red; line-height: 1;">
@@ -151,7 +166,8 @@
                 @endif
             </a>
 
-            <a href="{{ route('notifications.index') }}" class="{{ $unreadNotifCount > 0 ? 'bold-notification' : '' }}">
+            <a href="{{ route('notifications.index') }}" 
+            class="{{ Request::is('notifications*') ? 'active' : '' }} {{ $unreadNotifCount > 0 ? 'bold-notification' : '' }}">
                 Notifications 
                 @if ($unreadNotifCount > 0)
                     <span style="color: red; line-height: 1;">

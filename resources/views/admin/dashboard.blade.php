@@ -2,57 +2,81 @@
 
 @section('title', 'Admin Dashboard')
 
+@section('content')
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Shrikhand&family=Great+Vibes&display=swap');
+
+    body {
+        background-color: #d9dbf0;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .dashboard-logo-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: calc(100vh - 60px);
+        text-align: center;
+        gap: 1.5rem;
+        margin-top: -100px;
+    }
+
     .logo2 {
-            display: flex;
-            align-items: center;
-        }
-    .div1 {
-        margin: 100px 0 0 200px;
+        position: relative;
+        width: 360px;
+        height: 160px;
+        transform: translateX(-80px);
     }
 
     .logo-circle2 {
-        width: 240px;
-        height: 240px;
-        background-color: #e6f49c;
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        background-color: #daf3a7;
         border-radius: 50%;
-        margin-right: -80px;
-        margin-right: -80px;
-        padding-left: 10px;
-    }
-
-    .a {
-        margin-left: 100px;
+        left: 0;
+        top: -10px;
+        z-index: 1;
     }
 
     .logo-text2 {
+        position: absolute;
+        left: 65px;
+        top: 40px;
+        font-size: 4.2rem;
+        z-index: 2;
         display: flex;
         align-items: baseline;
-        font-size: 6.8em;
     }
 
     .logo-text2 .bold {
         font-family: 'Shrikhand', cursive;
-        font-weight: normal;
+        color: #333;
     }
 
     .logo-text2 .script {
         font-family: 'Great Vibes', cursive;
         font-size: 1em;
         margin-left: 6px;
+        color: #333;
+    }
+
+    .homepage-subtitle {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 1.4rem;
+        color: #222;
+        max-width: 90%;
     }
 </style>
 
-@section('content')
-    <div class="div1">
-        <div class="logo2">
-            <div class="logo-circle2"></div>
-            <div class="logo-text2">
-                <span class="bold">Student</span><span class="script">Sells</span>
-            </div>
-            
+<div class="dashboard-logo-section">
+    <div class="logo2">
+        <div class="logo-circle2"></div>
+        <div class="logo-text2">
+            <span class="bold">Student</span><span class="script">Sells</span>
         </div>
-            <h2 class="a">a user-friendly platform that enables students to buy and sell</h2>
-    </div> 
-
+    </div>
+    <p class="homepage-subtitle">a user-friendly platform that enables students to buy and sell</p>
+</div>
 @endsection

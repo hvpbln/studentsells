@@ -5,7 +5,7 @@
 @section('content')
 <style>
     body {
-        font-family: 'Segoe UI', Tahoma, sans-serif;
+        font-family: 'Montserrat', sans-serif;
     }
 
     .page-title {

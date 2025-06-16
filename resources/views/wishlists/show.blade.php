@@ -123,9 +123,15 @@
         </p>
 
         @if($wishlist->images->count())
-            <div class="d-flex flex-wrap gap-2 mb-3">
+            <div class="wishlist-images mb-2 d-flex flex-wrap gap-2">
                 @foreach($wishlist->images as $image)
-                    <img src="{{ asset('storage/' . $image->image_url) }}" class="wishlist-image" alt="Image">
+                    <img src="{{ asset('storage/' . $image->image_url) }}"
+                        alt="Image"
+                        class="wishlist-image"
+                        style="cursor: pointer;"
+                        data-bs-toggle="modal"
+                        data-bs-target="#wishlistImagePreviewModal"
+                        data-image="{{ asset('storage/' . $image->image_url) }}">
                 @endforeach
             </div>
         @endif
@@ -184,4 +190,28 @@
     });
 </script>
 
+<div class="modal fade" id="wishlistImagePreviewModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content bg-transparent border-0">
+      <div class="modal-body text-center">
+        <img id="wishlistPreviewImage" src="" alt="Preview" class="img-fluid rounded shadow" style="max-height: 80vh;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const previewImage = document.getElementById('wishlistPreviewImage');
+        const modal = document.getElementById('wishlistImagePreviewModal');
+        document.querySelectorAll('[data-bs-target="#wishlistImagePreviewModal"]').forEach(img => {
+            img.addEventListener('click', function () {
+                previewImage.src = this.getAttribute('data-image');
+            });
+        });
+        modal.addEventListener('hidden.bs.modal', () => {
+            previewImage.src = '';
+        });
+    });
+</script>
 @endsection

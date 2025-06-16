@@ -2,8 +2,10 @@
 
 @section('content')
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Shrikhand&family=Great+Vibes&display=swap');
+    
     body {
-        font-family: 'Segoe UI', sans-serif;
+        font-family: 'Montserrat', sans-serif;
         color: #1f2937;
     }
 

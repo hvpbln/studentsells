@@ -2,8 +2,11 @@
 
 @section('content')
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Shrikhand&family=Great+Vibes&display=swap');
+    
     body {
         background-color: #dedff1;
+        font-family: 'Montserrat', sans-serif;
     }
 
     .wishlist-container {
@@ -21,10 +24,20 @@
         margin-bottom: 1.5rem;
     }
 
+    .wishlist-image {
+        cursor: zoom-in;
+    }
+
     .wishlist-images img {
         width: 120px;
         border-radius: 10px;
         margin-right: 10px;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+
+    .wishlist-images img:hover {
+        transform: scale(1.02);
     }
 
     .wishlist-buttons .btn {
@@ -78,7 +91,13 @@
         margin-bottom: 10px;
     }
 
-    
+    /* Modal image preview */
+    .modal-body img {
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        max-height: 80vh;
+        max-width: 100%;
+    }
 </style>
 
 <div class="wishlist-container">
@@ -140,7 +159,11 @@
                 @if($wishlist->images->count())
                     <div class="wishlist-images mb-2 d-flex">
                         @foreach($wishlist->images as $image)
-                            <img src="{{ asset('storage/' . $image->image_url) }}" alt="Image">
+                            <img src="{{ asset('storage/' . $image->image_url) }}" 
+                                alt="Image"
+                                data-bs-toggle="modal"
+                                data-bs-target="#wishlistImagePreviewModal"
+                                data-image="{{ asset('storage/' . $image->image_url) }}">
                         @endforeach
                     </div>
                 @endif
@@ -150,7 +173,7 @@
                     <a href="{{ route('wishlists.responses.create', $wishlist->id) }}" class="btn btn-outline-info btn-sm">Respond</a>
                     @auth
                         @if(auth()->id() !== $wishlist->user_id)
-                            <a href="{{ route('messages.show', ['userId' => $wishlist->user_id, 'wishlist_id' => $wishlist->id]) }}" class="btn btn-contact btn-sm">Contact Seller</a>
+                            <a href="{{ route('messages.show', ['userId' => $wishlist->user_id, 'wishlist_id' => $wishlist->id]) }}" class="btn btn-contact btn-sm">Contact Poster</a>
                         @endif
                     @endauth
                 </div>
@@ -162,4 +185,30 @@
         <p>No wishlists found.</p>
     @endif
 </div>
+
+<!-- Modal for Image Preview -->
+<div class="modal fade" id="wishlistImagePreviewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg-transparent border-0">
+            <div class="modal-body text-center">
+                <img id="wishlistPreviewImage" src="" alt="Preview">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const previewImage = document.getElementById('wishlistPreviewImage');
+        const modal = document.getElementById('wishlistImagePreviewModal');
+        document.querySelectorAll('[data-bs-target="#wishlistImagePreviewModal"]').forEach(img => {
+            img.addEventListener('click', function () {
+                previewImage.src = this.getAttribute('data-image');
+            });
+        });
+        modal.addEventListener('hidden.bs.modal', () => {
+            previewImage.src = '';
+        });
+    });
+</script>
 @endsection

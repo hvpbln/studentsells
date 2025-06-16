@@ -1,6 +1,7 @@
 @extends('layouts.layout')
 
 @section('content')
+
 <div class="card mb-4 shadow-sm card-display">
     <div class="card-body">
         <h4 class="fw-bold">{{ $item->title }}</h4>
@@ -10,7 +11,6 @@
                  alt="Profile Photo"
                  class="rounded-circle me-3"
                  style="width: 64px; height: 64px; object-fit: cover;">
-
             <div>
                 <p class="mb-1">
                     <strong>
@@ -34,14 +34,19 @@
         <p><strong>Status:</strong> <span class="badge bg-secondary">{{ $item->status }}</span></p>
 
         @if($item->images->count())
-            <div class="listing-images mb-2 d-flex flex-wrap justify-content-start gap-2">
+            <div class="listing-images mb-2 d-flex flex-wrap gap-2" style="max-width: 100%;">
                 @foreach($item->images as $image)
-                    <img src="{{ asset('storage/' . $image->image_url) }}" alt="Item Image"
-                        class="img-fluid" style="width: 300px; height: auto; object-fit: cover; border-radius: 10px;">
+                    <img src="{{ asset('storage/' . $image->image_url) }}"
+                    alt="Item Image"
+                    class="img-fluid preview-image"
+                    data-bs-toggle="modal"
+                    data-bs-target="#imagePreviewModal"
+                    data-image="{{ asset('storage/' . $image->image_url) }}"
+                    style="width: 300px; height: auto; object-fit: cover; 
+                    border-radius:10px; cursor: pointer;">
                 @endforeach
-            </div>
-        @endif
-
+                </div>
+            @endif
 
         <h3 class="mt-4">Responses</h3>
         @if($item->responses->count())
@@ -65,6 +70,16 @@
     </div>
 </div>
 
+<div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-labelledby="imagePreviewLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content bg-transparent border-0">
+      <div class="modal-body text-center p-0">
+        <img id="modalImage" src="" class="img-fluid rounded shadow" style="max-height: 80vh;">
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const hash = window.location.hash;
@@ -78,6 +93,16 @@
                 }, 1500);
             }
         }
+
+        const previewImages = document.querySelectorAll('.preview-image');
+        const modalImage = document.getElementById('modalImage');
+
+        previewImages.forEach(image => {
+            image.addEventListener('click', function () {
+                const src = this.getAttribute('data-image');
+                modalImage.src = src;
+            });
+        });
     });
 </script>
 
