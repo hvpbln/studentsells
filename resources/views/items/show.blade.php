@@ -47,7 +47,6 @@
 </style>
 
 {{-- Main Listing Card --}}
-
 <div class="card mb-4 shadow-sm card-display">
     <div class="card-body">
         <h4 class="fw-bold">{{ $item->title }}</h4>
@@ -57,6 +56,7 @@
                  alt="Profile Photo"
                  class="rounded-circle me-3"
                  style="width: 64px; height: 64px; object-fit: cover;">
+
             <div>
                 <p class="mb-1">
                     <strong>
@@ -79,19 +79,18 @@
 
         @if($item->images->count())
             <div class="listing-images mb-2 d-flex flex-wrap gap-2">
-            <div class="listing-images mb-2 d-flex flex-wrap gap-2" style="max-width: 100%;">
                 @foreach($item->images as $image)
                     <img src="{{ asset('storage/' . $image->image_url) }}"
-                    alt="Item Image"
-                    class="img-fluid preview-image"
-                    data-bs-toggle="modal"
-                    data-bs-target="#imagePreviewModal"
-                    data-image="{{ asset('storage/' . $image->image_url) }}"
-                    style="width: 300px; height: auto; object-fit: cover; 
-                    border-radius:10px; cursor: pointer;">
+                        alt="Item Image"
+                        class="img-fluid preview-image"
+                        data-bs-toggle="modal"
+                        data-bs-target="#imagePreviewModal"
+                        data-image="{{ asset('storage/' . $image->image_url) }}"
+                        style="width: 300px; height: auto; object-fit: cover; 
+                        border-radius:10px; cursor: pointer;">
                 @endforeach
-                </div>
-            @endif
+            </div>
+        @endif
 
         <a href="{{ route('items.respond', $item->id) }}" class="btn btn-respond mt-3">Respond to Listing</a>
         <a href="{{ route('items.index') }}" class="btn btn-secondary mt-3">Back to List</a>
@@ -103,7 +102,6 @@
     <div class="card-body">
         <h3 class="fw-semibold mb-3">Responses</h3>
 
-        <h3 class="mt-4">Responses</h3>
         @if($item->responses->count())
             @foreach($item->responses as $response)
                 <div id="response-{{ $response->id }}" class="response-card mb-3">
@@ -117,20 +115,7 @@
         @else
             <p class="text-muted">No responses yet.</p>
         @endif
-
-        <a href="{{ route('items.respond', $item->id) }}" class="btn btn-primary mt-3">Respond to Listing</a>
-        <a href="{{ route('items.index') }}" class="btn btn-secondary mt-3">Back to List</a>
     </div>
-</div>
-
-<div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-labelledby="imagePreviewLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content bg-transparent border-0">
-      <div class="modal-body text-center p-0">
-        <img id="modalImage" src="" class="img-fluid rounded shadow" style="max-height: 80vh;">
-      </div>
-    </div>
-  </div>
 </div>
 
 <script>
@@ -145,16 +130,6 @@
                 }, 1500);
             }
         }
-
-        const previewImages = document.querySelectorAll('.preview-image');
-        const modalImage = document.getElementById('modalImage');
-
-        previewImages.forEach(image => {
-            image.addEventListener('click', function () {
-                const src = this.getAttribute('data-image');
-                modalImage.src = src;
-            });
-        });
     });
 </script>
 @endsection

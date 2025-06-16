@@ -3,13 +3,6 @@
 @section('content')
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Shrikhand&family=Great+Vibes&display=swap');
-
-    body {
-        background-color: #dedff1;
-        font-family: 'Montserrat', sans-serif;
-    }
-
     .listing-card {
         background-color: #f9f9f2;
         border: none;
@@ -192,6 +185,8 @@
                 </span>
             </div>
 
+
+
             @php
                 $isLong = strlen(strip_tags($item->description)) > 300;
             @endphp
@@ -204,6 +199,7 @@
                     <a href="javascript:void(0);" class="see-more-link" onclick="toggleDescription({{ $item->id }})" id="toggle-{{ $item->id }}">See More</a>
                 @endif
             </div>
+
 
             @if($item->images->count())
                 <div class="listing-images mb-2 d-flex flex-wrap gap-2" style="max-width: 100%;">
@@ -219,6 +215,7 @@
                     @endforeach
                 </div>
             @endif
+
 
             {{-- Buttons --}}
             <div class="listing-buttons d-flex justify-content-between align-items-center mt-2">
@@ -246,7 +243,9 @@
 @else
     <div class="alert alert-info">No items have been listed yet.</div>
 @endif
+@endsection
 
+<!-- Image Preview Modal -->
 <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-labelledby="imagePreviewLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content bg-transparent border-0">
@@ -256,19 +255,3 @@
     </div>
   </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const previewImages = document.querySelectorAll('.preview-image');
-        const modalImage = document.getElementById('modalImage');
-
-        previewImages.forEach(image => {
-            image.addEventListener('click', function () {
-                const src = this.getAttribute('data-image');
-                modalImage.src = src;
-            });
-        });
-    });
-</script>
-
-@endsection
