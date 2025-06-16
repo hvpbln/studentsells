@@ -97,10 +97,6 @@
         display: inline-block;
     }
 
-    .contact-link:hover {
-        text-decoration: underline;
-    }
-
     nav a {
         font-family: 'Poppins', sans-serif;
     }

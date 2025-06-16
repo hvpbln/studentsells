@@ -75,6 +75,42 @@
         white-space: nowrap;
         margin-left: 1rem;
     }
+
+    .mark-read-button {
+        background-color: #dbf4a7;
+        color: #3b3f58;
+        border: none;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        transition: all 0.25s ease-in-out;
+        cursor: pointer;
+    }
+
+    .mark-read-button:hover {
+        background-color: #95c235;
+        color: #fff;
+        transform: scale(1.03);
+        box-shadow: 0 3px 12px rgba(149, 194, 53, 0.3);
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #dedff1;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #b7e4c7;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #95c235;
+    }
 </style>
 
 <div class="notifications-container">
@@ -82,7 +118,7 @@
         <h3 class="notification-header">Notifications</h3>
         <form method="POST" action="{{ route('notifications.markAsRead') }}">
             @csrf
-            <button type="submit" class="btn btn-primary">Mark All as Read</button>
+            <button type="submit" class="mark-read-button">Mark All as Read</button>
         </form>
     </div>
 

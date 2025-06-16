@@ -65,20 +65,35 @@
         }
 
         nav a {
-        text-decoration: none;
-        color: #333;
-        font-weight: 500;
-        font-size: 1.1em;
-        transition: all 0.3s ease;
+            position: relative;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            font-size: 1.1em;
+            transition: color 0.3s ease;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 0%;
+            height: 2px;
+            background-color: #333;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #8e9dcc;
+        }
+
+        nav a:hover::after {
+            width: 100%;
         }
 
         nav a.active {
             font-weight: 700;
-        }
-
-        nav a:hover {
-            background-color: #f0f0f0;
-            cursor: pointer;
         }
 
         .right-section {

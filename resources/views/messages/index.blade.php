@@ -44,17 +44,19 @@
 
     .inbox-search-form button {
         background-color: #dbf4a7;
-        color: #838ab6;
+        color: #3b3f58;
         border: none;
-        border-radius: 8px;
-        padding: 0.5rem 1rem;
         font-weight: 600;
-        cursor: pointer;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        transition: all 0.25s ease-in-out;
     }
 
     .inbox-search-form button:hover {
         background-color: #95c235;
-        color: #e5e5e9;
+        color: #fff;
+        transform: scale(1.03);
+        box-shadow: 0 3px 12px rgba(149, 194, 53, 0.3);
     }
 
     .search-results {
@@ -140,6 +142,24 @@
         font-size: 0.85rem;
         color: #9ca3af;
         white-space: nowrap;
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #dedff1;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #b7e4c7;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #95c235;
     }
 </style>
 

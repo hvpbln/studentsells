@@ -139,18 +139,23 @@
 
     .chat-send-button {
         background-color: #dbf4a7;
-        color: #838ab6;
+        color: #3b3f58;
         border: none;
-        border-radius: 8px;
+        font-weight: 600;
         padding: 0.5rem 1rem;
+        border-radius: 8px;
         font-size: 0.875rem;
         cursor: pointer;
+        transition: all 0.25s ease-in-out;
     }
 
     .chat-send-button:hover {
         background-color: #95c235;
-        color: #e5e5e9;
+        color: #fff;
+        transform: scale(1.03);
+        box-shadow: 0 3px 12px rgba(149, 194, 53, 0.3);
     }
+
 </style>
 
 <script>

@@ -3,7 +3,7 @@
 @section('content')
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Shrikhand&family=Great+Vibes&display=swap');
-    
+
     body {
         background-color: #dedff1;
         font-family: 'Montserrat', sans-serif;
@@ -22,10 +22,13 @@
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
         padding: 1rem 1.5rem;
         margin-bottom: 1.5rem;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        position: relative;
     }
 
-    .wishlist-image {
-        cursor: zoom-in;
+    .wishlist-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
     }
 
     .wishlist-images img {
@@ -40,29 +43,51 @@
         transform: scale(1.02);
     }
 
-    .wishlist-buttons .btn {
-        margin-right: 0.5rem;
-        font-size: 0.875rem;
+    .wishlist-buttons {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1rem;
+    }
+
+    .btn, .btn-sm, .create-wishlist, .search-button, .btn-contact {
+        border-radius: 8px !important;
+        transition: all 0.25s ease-in-out;
     }
 
     .btn-contact {
         background-color: #e5f4c6;
-        color: #6c757d;
-        border-radius: 10px;
+        color: #3b3f58;
+        border: none;
+    }
+
+    .btn-contact:hover {
+        background-color: #cde38e;
+        color: #2a2d3c;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-outline-info {
+        border-radius: 8px;
+    }
+
+    .btn:hover {
+        transform: translateY(-1px);
     }
 
     .search-button, .create-wishlist {
         background-color: #dbf4a7;
         color: #3b3f58;
         border: none;
-        border-radius: 8px;
-        padding: 0.5rem 1rem;
         font-weight: 600;
+        padding: 0.5rem 1rem;
     }
 
     .search-button:hover, .create-wishlist:hover {
         background-color: #95c235;
-        color: white;
+        color: #fff;
+        transform: scale(1.03);
+        box-shadow: 0 3px 12px rgba(149, 194, 53, 0.3);
     }
 
     .search-bar-wrapper {
@@ -77,27 +102,54 @@
         gap: 0.5rem;
     }
 
-    .name {
-        font-size: 1.2rem;
-        font-weight: 400;
-    }
-
     a {
         text-decoration: none;
         color: black;
     }
 
-    .badge {
-        margin-bottom: 10px;
+    .badge-status {
+        padding: 0.4em 0.75em;
+        font-size: 0.75rem;
+        border-radius: 999px;
+        font-weight: 600;
     }
 
-    /* Modal image preview */
+    .bg-success {
+        background-color: #b7e4c7 !important;
+        color: #2b463c;
+    }
+
+    .bg-secondary {
+        background-color: #d6d6f5 !important;
+        color: #3b3f58;
+    }
+
     .modal-body img {
         border-radius: 16px;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         max-height: 80vh;
         max-width: 100%;
     }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #dedff1;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #b7e4c7;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #95c235;
+    }
+
 </style>
 
 <div class="wishlist-container">
@@ -116,17 +168,11 @@
     @if($wishlists->count())
         @foreach($wishlists as $wishlist)
             <div class="wishlist-card">
-                <div class="d-flex justify-content-between">
-                    <div class="name">
-                        <h3>
-                            <a href="{{ route('users.show', $wishlist->user_id) }}">
-                                {{ $wishlist->user->name ?? 'Unknown' }}
-                            </a>
-                        </h3>
-                    </div>
 
+                {{-- Dropdown for owner --}}
+                @auth
                     @if(Auth::id() === $wishlist->user_id)
-                    <div class="dropdown">
+                    <div class="dropdown position-absolute top-0 end-0 m-2">
                         <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background: transparent; border: none;">
                             &#8942;
                         </button>
@@ -145,32 +191,51 @@
                         </form>
                     </div>
                     @endif
+                @endauth
+
+                {{-- User header --}}
+                <div class="d-flex align-items-center mb-3">
+                    <img src="{{ $wishlist->user->profile_photo ? asset('storage/' . $wishlist->user->profile_photo) : asset('storage/profile_photos/placeholder_pfp.jpg') }}"
+                         class="rounded-circle me-3"
+                         style="width: 55px; height: 55px; object-fit: cover;">
+                    <div>
+                        <a href="{{ route('users.show', $wishlist->user_id) }}"><strong>{{ $wishlist->user->name ?? 'Unknown' }}</strong></a>
+                        <div><small class="text-muted">{{ $wishlist->created_at->diffForHumans() }}</small></div>
+                    </div>
                 </div>
 
                 <hr style="margin: 0.5rem 0;">
 
-                <span class="badge badge-status bg-{{ $wishlist->status == 'open' ? 'success' : 'secondary' }}">
-                    {{ ucfirst($wishlist->status) }}
-                </span> 
+                {{-- Title and status --}}
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <h5 class="fw-bold mb-0">{{ $wishlist->title }}</h5>
+                    <span class="badge badge-status bg-{{ $wishlist->status == 'open' ? 'success' : 'secondary' }}">
+                        {{ ucfirst($wishlist->status) }}
+                    </span>
+                </div>
 
-                <h5>{{ $wishlist->title }}</h5>
+                {{-- Description --}}
                 <p>{{ Str::limit($wishlist->description, 150) }}</p>
 
+                {{-- Images --}}
                 @if($wishlist->images->count())
-                    <div class="wishlist-images mb-2 d-flex">
+                    <div class="wishlist-images mb-2 d-flex flex-wrap">
                         @foreach($wishlist->images as $image)
                             <img src="{{ asset('storage/' . $image->image_url) }}" 
-                                alt="Image"
                                 data-bs-toggle="modal"
                                 data-bs-target="#wishlistImagePreviewModal"
-                                data-image="{{ asset('storage/' . $image->image_url) }}">
+                                data-image="{{ asset('storage/' . $image->image_url) }}"
+                                alt="Wishlist Image">
                         @endforeach
                     </div>
                 @endif
 
+                {{-- Buttons --}}
                 <div class="wishlist-buttons">
-                    <a href="{{ route('wishlists.show', $wishlist->id) }}" class="btn btn-outline-info btn-sm">View</a>
-                    <a href="{{ route('wishlists.responses.create', $wishlist->id) }}" class="btn btn-outline-info btn-sm">Respond</a>
+                    <div>
+                        <a href="{{ route('wishlists.show', $wishlist->id) }}" class="btn btn-outline-info btn-sm me-2">View</a>
+                        <a href="{{ route('wishlists.responses.create', $wishlist->id) }}" class="btn btn-outline-info btn-sm">Respond</a>
+                    </div>
                     @auth
                         @if(auth()->id() !== $wishlist->user_id)
                             <a href="{{ route('messages.show', ['userId' => $wishlist->user_id, 'wishlist_id' => $wishlist->id]) }}" class="btn btn-contact btn-sm">Contact Poster</a>
@@ -200,13 +265,12 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const previewImage = document.getElementById('wishlistPreviewImage');
-        const modal = document.getElementById('wishlistImagePreviewModal');
         document.querySelectorAll('[data-bs-target="#wishlistImagePreviewModal"]').forEach(img => {
             img.addEventListener('click', function () {
                 previewImage.src = this.getAttribute('data-image');
             });
         });
-        modal.addEventListener('hidden.bs.modal', () => {
+        document.getElementById('wishlistImagePreviewModal').addEventListener('hidden.bs.modal', () => {
             previewImage.src = '';
         });
     });

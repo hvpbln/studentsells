@@ -102,7 +102,7 @@
 
     {{-- Profile Header --}}
     <div class="profile-header">
-        <img src="{{ asset('storage/' . ($user->profile_photo ?? 'storage/profile_photos/placeholder_pfp.jpg')) }}" alt="Profile Photo">
+        <img src="{{ $user->profile_photo ? asset('storage/' . $user->profile_photo) : asset('storage/profile_photos/placeholder_pfp.jpg') }}" alt="Profile Photo">
         <div>
             <h2>{{ $user->name }}</h2>
             <p class="text-muted">{{ $user->email }}</p>

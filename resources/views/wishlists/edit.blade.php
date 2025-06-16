@@ -79,7 +79,8 @@
                 <label for="description" class="form-label">Description</label>
                 <textarea id="description" name="description"
                           class="form-control @error('description') is-invalid @enderror"
-                          rows="4">{{ old('description', $wishlist->description) }}</textarea>
+                          maxlength="1000" oninput="updateCharCount()" rows="4">{{ old('description', $wishlist->description) }}</textarea>
+                          <small id="char-count" class="text-muted">1000 characters remaining</small>
                 @error('description')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror

@@ -7,7 +7,7 @@
     body {
         font-family: 'Montserrat', sans-serif;
     }
-    
+
     .tab-buttons {
         margin-bottom: 20px;
     }
@@ -20,6 +20,11 @@
         border-radius: 10px;
         font-weight: bold;
         transition: background-color 0.3s ease;
+    }
+
+    .tab-buttons button:hover {
+        background-color: #cdd7a7;
+        cursor: pointer;
     }
 
     .tab-buttons button.active {
@@ -49,6 +54,12 @@
         border-radius: 10px;
         margin-right: 10px;
         object-fit: cover;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+
+    .item-images img:hover, .wishlist-images img:hover {
+        transform: scale(1.03);
     }
 
     .btn-contact {
@@ -96,10 +107,33 @@
         align-items: center;
     }
 
+    .modal-body img {
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        max-height: 80vh;
+        max-width: 100%;
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #dedff1;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #b7e4c7;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #95c235;
+    }
 </style>
 
 <div class="container">
-
     {{-- Profile Header --}}
     <div class="profile-header">
         <img src="{{ asset('storage/' . $user->profile_photo) }}" alt="Profile Photo" class="user-header-photo">
@@ -136,11 +170,10 @@
     </div>
 
     <div class="container2">
-            {{-- Tab Buttons --}}
+        {{-- Tab Buttons --}}
         <div class="tab-buttons">
             <button class="tab-btn active" onclick="switchTab('listings')">My Listings</button>
             <button class="tab-btn" onclick="switchTab('wishlists')">My Wishlists</button>
-
         </div>
 
         {{-- Listings Section --}}
@@ -170,9 +203,13 @@
                     <p>{{ Str::limit($item->description, 150) }}</p>
 
                     @if($item->images->count())
-                        <div class="item-images d-flex mb-2">
+                        <div class="item-images d-flex mb-2 flex-wrap">
                             @foreach($item->images as $image)
-                                <img src="{{ asset('storage/' . $image->image_url) }}" alt="Item Image" class="img-thumbnail">
+                                <img src="{{ asset('storage/' . $image->image_url) }}" 
+                                     alt="Item Image"
+                                     data-bs-toggle="modal"
+                                     data-bs-target="#imagePreviewModal"
+                                     data-image="{{ asset('storage/' . $image->image_url) }}">
                             @endforeach
                         </div>
                     @endif
@@ -180,11 +217,11 @@
                     <div>
                         <a href="{{ route('items.show', $item->id) }}" class="btn btn-outline-info btn-sm">View</a>
                         <a href="{{ route('items.respond', $item->id) }}" class="btn btn-outline-info btn-sm">Respond</a>
-                            @auth
-                                @if(auth()->id() !== $item->user_id)
-                                    <a href="{{ route('messages.show', $item->user_id) }}?item_id={{ $item->id }}" class="btn btn-contact btn-sm">Contact Seller</a>
-                                @endif
-                            @endauth
+                        @auth
+                            @if(auth()->id() !== $item->user_id)
+                                <a href="{{ route('messages.show', $item->user_id) }}?item_id={{ $item->id }}" class="btn btn-contact btn-sm">Contact Seller</a>
+                            @endif
+                        @endauth
                     </div>
                 </div>
             @empty
@@ -219,9 +256,13 @@
                     <p>{{ Str::limit($wishlist->description, 150) }}</p>
 
                     @if($wishlist->images->count())
-                        <div class="wishlist-images d-flex mb-2">
+                        <div class="wishlist-images d-flex mb-2 flex-wrap">
                             @foreach($wishlist->images as $image)
-                                <img src="{{ asset('storage/' . $image->image_url) }}" alt="Wishlist Image" class="img-thumbnail">
+                                <img src="{{ asset('storage/' . $image->image_url) }}" 
+                                     alt="Wishlist Image"
+                                     data-bs-toggle="modal"
+                                     data-bs-target="#imagePreviewModal"
+                                     data-image="{{ asset('storage/' . $image->image_url) }}">
                             @endforeach
                         </div>
                     @endif
@@ -229,33 +270,47 @@
                     <div>
                         <a href="{{ route('wishlists.show', $wishlist->id) }}" class="btn btn-outline-info btn-sm">View</a>
                         <a href="{{ route('wishlists.responses.create', $wishlist->id) }}" class="btn btn-outline-info btn-sm">Respond</a>
-                            @auth
-                                @if(auth()->id() !== $wishlist->user_id)
-                                    <a href="{{ route('messages.show', $wishlist->user_id) }}?wishlist_id={{ $wishlist->id }}" class="btn btn-contact btn-sm">Contact Poster</a>
-                                @endif
-                            @endauth
+                        @auth
+                            @if(auth()->id() !== $wishlist->user_id)
+                                <a href="{{ route('messages.show', $wishlist->user_id) }}?wishlist_id={{ $wishlist->id }}" class="btn btn-contact btn-sm">Contact Poster</a>
+                            @endif
+                        @endauth
                     </div>
                 </div>
             @empty
                 <p class="text-muted">You haven't added any wishlists.</p>
             @endforelse
         </div>
-
     </div>
 </div>
 
-    
+{{-- Image Preview Modal --}}
+<div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg-transparent border-0">
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" alt="Preview">
+            </div>
+        </div>
+    </div>
+</div>
 
-{{-- JavaScript to Handle Tab Switching --}}
+{{-- JavaScript --}}
 <script>
     function switchTab(tabId) {
-        // Hide all
         document.querySelectorAll('.tab-content').forEach(div => div.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-
-        // Show selected
         document.getElementById(tabId).classList.add('active');
         event.target.classList.add('active');
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('imagePreviewModal');
+        modal.addEventListener('show.bs.modal', function (event) {
+            const trigger = event.relatedTarget;
+            const imgUrl = trigger.getAttribute('data-image');
+            modal.querySelector('#modalImage').setAttribute('src', imgUrl);
+        });
+    });
 </script>
 @endsection
