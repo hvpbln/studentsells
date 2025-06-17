@@ -204,7 +204,13 @@
                          class="rounded-circle me-3"
                          style="width: 55px; height: 55px; object-fit: cover;">
                     <div>
-                        <a href="{{ route('users.show', $wishlist->user_id) }}"><strong>{{ $wishlist->user->name ?? 'Unknown' }}</strong></a>
+                        @php
+                            $isLoggedInUser = auth()->check() && auth()->id() === $wishlist->user_id;
+                        @endphp
+
+                        <a href="{{ $isLoggedInUser ? route('student.profile') : route('users.show', $wishlist->user_id) }}">
+                            <strong>{{ $wishlist->user->name ?? 'Unknown' }}</strong>
+                        </a>
                         <div><small class="text-muted">{{ $wishlist->created_at->diffForHumans() }}</small></div>
                     </div>
                 </div>

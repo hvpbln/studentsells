@@ -199,7 +199,13 @@ a {
                          class="rounded-circle me-3"
                          style="width: 55px; height: 55px; object-fit: cover;">
                     <div>
-                        <a href="{{ route('users.show', $item->user_id) }}"><strong>{{ $item->user->name ?? 'Unknown' }}</strong></a>
+                        @php
+                            $isOwner = auth()->check() && auth()->id() === $item->user_id;
+                        @endphp
+
+                        <a href="{{ $isOwner ? route('student.profile') : route('users.show', $item->user_id) }}">
+                            <strong>{{ $item->user->name ?? 'Unknown' }}</strong>
+                        </a>
                         <div><small class="text-muted">{{ $item->updated_at->diffForHumans() }}</small></div>
                     </div>
                 </div>

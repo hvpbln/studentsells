@@ -26,7 +26,9 @@ class AdminController extends Controller
      */
     public function manageUsers()
     {
-        $users = User::orderBy('created_at', 'desc')->paginate(20);
+        $users = User::where('role', 'student')
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(20);
 
         return view('admin.manageUsers', compact('users'));
     }
