@@ -1,47 +1,84 @@
 # StudentSells
-Final project for CTAPDEVL - **Applications Development and Emerging Technologies**
 
-## Setup Instructions
-Follow these steps to set up the project locally:
-1. Start your local server:
-- Open XAMPP and start Apache and MySQL.
+Final project for **CTAPDEVL - Applications Development and Emerging Technologies**
 
-2. Create the database:
-- Go to http://localhost/phpmyadmin
-- Create a new database named 'studentsells'
+## Project Description
 
-3. Configure environment settings:
-- Open the .env file in the project root
-- (If you don't already have it, duplicate the .env.example file and rename it to '.env'.
-- Update the database connection settings to match your local MySQL credentials
-- This is what it should look like:
+**StudentSells** is a full-stack Laravel web application designed as a marketplace platform exclusively for students. It allows users to buy, sell, and post requests for items within their academic community. The system includes a robust set of features for user management, listings, wishlist creation, messaging, ratings, and admin moderation.
+
+---
+
+## Video Demonstration
+
+Watch the video here: [link]
+
+---
+
+## Requirements
+
+Make sure the following tools and technologies are installed before running the project:
+
+- **PHP** 8.4.5
+- **Composer**
+- **Laravel** 12.14.1
+- **MySQL** (for database)
+- **XAMPP** (for running Apache & MySQL)
+
+---
+
+## Installation & Setup Instructions
+
+Follow these steps to set up the project on your local machine:
+
+### 1. Start your local server
+
+- Open **XAMPP** and start both **Apache** and **MySQL**.
+
+### 2. Create the database
+
+- Go to [http://localhost/phpmyadmin](http://localhost/phpmyadmin)
+- Create a new database named:
+```
+studentsells
+```
+
+### 3. Configure environment settings
+
+- In the root directory of the project, duplicate `.env.example` and rename it to `.env`
+- Open the `.env` file and configure your DB settings:
+
 ```
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=studentsells
-DB_USERNAME=root or your db username
-DB_PASSWORD= _blank_ or your db password
-``` 
+DB_USERNAME=root         # or your local db username
+DB_PASSWORD=             # or your db password if any
+```
 
-4. Install dependencies and setup Laravel:
-- Open your command prompt in the project folder and run:
-    - `composer install` (downloads all required PHP packages)
-    - `php artisan key:generate` (generates the app key used for security)
-    - `php artisan session:table` (creates a migration file for the sessions table)
-    - `php artisan migrate` (creates all the database tables)
+### 4. Install dependencies and set up Laravel
 
-5. If may babaguhin kayo sa migrations, tell exeryone so all of us can
-    - pull changes in code
-    - `php artisan migrate:rollback` (to delete the former migrations)
-    - `php artisan migrate` (to migrate the new set)
+- Open your terminal in the project folder and run:
+```
+composer install          # Install PHP dependencies
+php artisan key:generate  # Generate app key
+php artisan migrate       # Create database tables
+```
 
-6. To manually create an admin account in your local environment, run the following command in your terminal:
+### 5. Collaborating on migrations
 
+- If someone changes a migration, make sure everyone pulls the updated code by running:
+```
+php artisan migrate:rollback  # Undo previous migrations
+php artisan migrate           # Apply new migrations
+```
+
+### 6. Create an admin account (for local testing)
+- In the command line at the root directory of the project, run:
 ```
 php artisan tinker
 ```
-Then enter the following code in Tinker:
+- Then in Tinker, run:
 ```
 use App\Models\User;
 
@@ -52,8 +89,15 @@ User::create([
     'role' => 'admin',
     'status' => 'active',
 ]);
-``` 
-7. Storage Set up
+```
+
+### 7. Set up storage for profile images
+
 ```
 php artisan storage:link
+```
+
+### 8. Launch the Laravel server
+```
+php artisan serve
 ```
