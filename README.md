@@ -10,7 +10,7 @@ Final project for **CTAPDEVL - Applications Development and Emerging Technologie
 
 ## Video Demonstration
 
-Watch the video here: [link]
+Watch the video [here](https://youtu.be/1mOy_VGN3ig?si=JldqDUiEyDKX_B99)
 
 ---
 
